@@ -8,12 +8,8 @@
         <div class="container">
             <h2>ユーザーログイン</h2>
             <div class="field">
-                <div class="field">
                   <label for="id_username">メールアドレス</label>  
                   {{ form.username }}
-                  {% if form.username.errors %}
-                  {% endif %}
-                {{ form.username }}
                 {% if form.username.errors %}
                 <ul class="errorlist">
                     {% for error in form.username.errors %}
