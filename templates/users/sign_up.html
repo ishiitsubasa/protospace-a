@@ -6,7 +6,7 @@
 
     <div class="contents row">
         <div class="container">
-            <h2>Sign up</h2>
+            <h2>新規登録</h2>
             {% if form.errors %}
             <div class="error">
                 <p>入力にエラーがあります。もう一度ご確認ください。</p>
@@ -52,7 +52,6 @@
             </div>
 
             <div class="field">
-            <label for="id_username">メールアドレス</label>  
                 {{ form.nickname.label_tag }}
                 {{ form.nickname }}
                 {% if form.nickname.errors %}
@@ -101,7 +100,7 @@
             </div>
 
             <div class="actions">
-                <input type="submit" value="Sign Up">
+                <input type="submit" value="新規登録">
             </div>
         </div>
     </div>
