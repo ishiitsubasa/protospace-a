@@ -1,12 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView,ListView,DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import FormMixin
-from comments.forms import CommentForm
-from comments.models import Comment
 
 
 

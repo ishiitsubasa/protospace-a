@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import CreateView,IndexView, DetailView, UpdateView, DeleteView
+from .views import CreateView
 
 app_name='Posts'
 
