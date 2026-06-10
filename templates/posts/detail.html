@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="contents row">
+  <div class="contents_post" style="background-image: url('{{ post.image.url }}');">
+    {{ post.catchphrase }}
+    {{ post.concept }}
+    {% if user.is_authenticated %}
+    <ul>
+      <li>
+        <form action="{% url 'Posts:delete' post.id %}" method="post">
+          {% csrf_token %}
+          <input type="submit" class="delete-btn" value="削除">
+        </form>
+      </li>
+      <li>
+        <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集</a>
+      </li>
+    </ul>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
