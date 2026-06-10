@@ -4,7 +4,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth import get_user_model
 
 from posts.models import Post
-from .factories import PostFactory, UserFactory
+from tests.factories.test_posts import PostFactory, UserFactory
 
 User = get_user_model()
 
