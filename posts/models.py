@@ -9,6 +9,7 @@ class Post(models.Model):
   concept=models.TextField(null=False,blank=False)
   image=models.ImageField(upload_to='images/',blank=False,null=False)
   user=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-  
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
 # Create your models here.
