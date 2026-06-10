@@ -1,22 +1,11 @@
 import factory
 from factory.django import DjangoModelFactory
 from faker import Faker
-from django.contrib.auth import get_user_model
+from tests.factories.users import UserFactory
 
 from posts.models import Post
 
 fake = Faker("ja_JP")  # 日本語データを生成
-
-User = get_user_model()
-
-
-class UserFactory(DjangoModelFactory):
-    class Meta:
-        model = User
-
-    username = factory.Sequence(lambda n: f"user_{n}")
-    email = factory.Sequence(lambda n: f"user_{n}@example.com")
-    password = factory.PostGenerationMethodCall("set_password", "password123")
 
 
 class PostFactory(DjangoModelFactory):

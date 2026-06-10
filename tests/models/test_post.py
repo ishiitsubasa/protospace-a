@@ -2,9 +2,9 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth import get_user_model
-
 from posts.models import Post
-from tests.factories.test_posts import PostFactory, UserFactory
+from tests.factories.test_posts import PostFactory       # ① インポートパスを修正
+from tests.factories.users import UserFactory
 
 User = get_user_model()
 
@@ -25,24 +25,34 @@ class PostCreateViewTest(TestCase):
         self.user = UserFactory()
         self.url = reverse("Posts:create")
         self.index_url = reverse("Posts:index")
-        self.login_url = reverse("users:login")  # プロジェクトのログインURLに合わせて変更
+        self.login_url = reverse("users:login")
 
-        # 正常投稿に使う有効データ（画像なし）
         self.valid_data = {
             "name": "テストプロトタイプ",
             "catchphrase": "テストキャッチコピー",
             "concept": "テストコンセプト",
         }
 
+    # ログインのヘルパー（② USERNAME_FIELD が email なので email でログイン）
+    def login(self):
+        self.client.login(email=self.user.email, password="password123")
+
     # ----------------------------------------------------------------
     # ログイン状態の場合のみ、投稿ページへ遷移できること
     # ----------------------------------------------------------------
 
     def test_ログイン済みユーザーは投稿ページにアクセスできる(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
 
+    # ----------------------------------------------------------------
+    # ログアウト状態で投稿ページに遷移しようとすると、ログインページに遷移すること
+    # ----------------------------------------------------------------
+
+    def test_未ログインユーザーはログインページにリダイレクトされる(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, f"{self.login_url}?next={self.url}")
 
     # ----------------------------------------------------------------
     # 必要な情報を適切に入力して「保存する」ボタンを押すと、
@@ -50,7 +60,7 @@ class PostCreateViewTest(TestCase):
     # ----------------------------------------------------------------
 
     def test_正常な投稿でDBにレコードが作成される(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
         before_count = Post.objects.count()
 
         self.client.post(self.url, {**self.valid_data, "image": make_image()})
@@ -62,7 +72,7 @@ class PostCreateViewTest(TestCase):
     # ----------------------------------------------------------------
 
     def test_正常投稿後にトップページへリダイレクトされる(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
 
         response = self.client.post(
             self.url, {**self.valid_data, "image": make_image()}
@@ -75,7 +85,7 @@ class PostCreateViewTest(TestCase):
     # ----------------------------------------------------------------
 
     def test_nameが空だと投稿できない(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
         before_count = Post.objects.count()
 
         self.client.post(
@@ -85,7 +95,7 @@ class PostCreateViewTest(TestCase):
         self.assertEqual(Post.objects.count(), before_count)
 
     def test_nameが空だとフォームにエラーが表示される(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
 
         response = self.client.post(
             self.url, {**self.valid_data, "name": "", "image": make_image()}
@@ -98,7 +108,7 @@ class PostCreateViewTest(TestCase):
     # ----------------------------------------------------------------
 
     def test_catchphraseが空だと投稿できない(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
         before_count = Post.objects.count()
 
         self.client.post(
@@ -108,7 +118,7 @@ class PostCreateViewTest(TestCase):
         self.assertEqual(Post.objects.count(), before_count)
 
     def test_catchphraseが空だとフォームにエラーが表示される(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
 
         response = self.client.post(
             self.url, {**self.valid_data, "catchphrase": "", "image": make_image()}
@@ -121,7 +131,7 @@ class PostCreateViewTest(TestCase):
     # ----------------------------------------------------------------
 
     def test_conceptが空だと投稿できない(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
         before_count = Post.objects.count()
 
         self.client.post(
@@ -131,7 +141,7 @@ class PostCreateViewTest(TestCase):
         self.assertEqual(Post.objects.count(), before_count)
 
     def test_conceptが空だとフォームにエラーが表示される(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
 
         response = self.client.post(
             self.url, {**self.valid_data, "concept": "", "image": make_image()}
@@ -144,17 +154,17 @@ class PostCreateViewTest(TestCase):
     # ----------------------------------------------------------------
 
     def test_imageがないと投稿できない(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
         before_count = Post.objects.count()
 
-        self.client.post(self.url, self.valid_data)  # imageなし
+        self.client.post(self.url, self.valid_data)
 
         self.assertEqual(Post.objects.count(), before_count)
 
     def test_imageがないとフォームにエラーが表示される(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
 
-        response = self.client.post(self.url, self.valid_data)  # imageなし
+        response = self.client.post(self.url, self.valid_data)
 
         self.assertIn("image", response.context["form"].errors)
 
@@ -163,7 +173,7 @@ class PostCreateViewTest(TestCase):
     # ----------------------------------------------------------------
 
     def test_バリデーションエラー時は同じページに留まる(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
 
         response = self.client.post(
             self.url, {**self.valid_data, "name": "", "image": make_image()}
@@ -176,7 +186,7 @@ class PostCreateViewTest(TestCase):
     # ----------------------------------------------------------------
 
     def test_バリデーションエラー時にcatchphraseの入力値が保持される(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()
 
         response = self.client.post(
             self.url, {**self.valid_data, "name": "", "image": make_image()}
@@ -188,7 +198,7 @@ class PostCreateViewTest(TestCase):
         )
 
     def test_バリデーションエラー時にconceptの入力値が保持される(self):
-        self.client.login(username=self.user.username, password="password123")
+        self.login()  # ③ nixkname のタイポを修正
 
         response = self.client.post(
             self.url, {**self.valid_data, "name": "", "image": make_image()}
