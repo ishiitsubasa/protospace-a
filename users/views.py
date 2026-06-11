@@ -1,7 +1,10 @@
-from django.shortcuts import render
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView,DeleteView,ListView,DetailView
-
+from django.urls import reverse_lazy
+from django.contrib.auth import login,get_user_model
+from django.views.generic import ListView
+from django.shortcuts import get_object_or_404
+from posts.models import Post
+from django.views.generic import CreateView
+from .forms import CustomUserCreationForm
 
 
 
