@@ -12,10 +12,6 @@ class SignUpView(CreateView):
   template_name = 'users/sign_up.html'
 
 
-class UserPageView(ListView):
-  model = Post
-  template_name = 'users/mypage.html'
-  context_object_name = 'posts'
 
   def get_queryset(self):
     user_id = self.kwargs.get('pk')

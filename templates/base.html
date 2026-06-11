@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Protospace</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header class="header">
+    <div class="header__bar row">
+      <p>SHARE THE PROTOTYPE</p>
+      <h1 class="grid-6"><a href="">PROTO SPACE</a></h1>
+      {% if user.is_authenticated %}
+        <div class="user_nav grid-6">  
+          <form method="POST" action=""> 
+            {% csrf_token %} 
+            <button type="submit">ログアウト</button>
+          </form>
+          <a class="post" href=''>投稿する</a>
+        </div>
+      {% else %}
+        <div class="grid-6">
+          <a class="post" href=''>ログイン</a>
+          <a class="post" href=''>新規登録</a>
+        </div>
+      {% endif %}
+    </div>
+  </header>
+  {% block content %}{% endblock content %}
+
+  <footer>
+    <p>
+    Copyright ©️ PROTO SPACE ALL rights reserved
+    </p>
+  </footer>
