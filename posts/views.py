@@ -7,7 +7,7 @@ from .forms import PostForm
 
 
 
-class CreateView(CreateView):
+class PostCreateView(CreateView):
   form_class=PostForm
   template_name='posts/create.html'
   success_url=reverse_lazy("Posts:index")
