@@ -26,7 +26,7 @@ class PostDetailView(DetailView):
   model=Post
   template_name='posts/detail.html'
 
-class UpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
   model = Post
   form_class = PostForm
   template_name = 'posts/update.html'
@@ -35,7 +35,7 @@ class UpdateView(LoginRequiredMixin, UpdateView):
       post = self.get_object()
         # 自分の投稿でなければトップへ
       if post.user != request.user:
-          return redirect('posts:index')
+          return redirect('Posts:index')
       return super().dispatch(request, *args, **kwargs)
 
   def form_valid(self, form):

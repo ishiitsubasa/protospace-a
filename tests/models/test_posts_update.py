@@ -27,12 +27,12 @@ class UpdateViewTest(TestCase):
     def test_ログイン状態で他人の投稿の編集ページへアクセスするとトップページへリダイレクトされる(self):
         self.client.force_login(self.other_user)
         response = self.client.get(self.url)
-        self.assertRedirects(response, reverse('posts:index'))
+        self.assertRedirects(response, reverse('Posts:index'))
 
     def test_ログイン状態で他人の投稿へPOSTしてもトップページへリダイレクトされる(self):
         self.client.force_login(self.other_user)
         response = self.client.post(self.url, {'name': '乗っ取り'})
-        self.assertRedirects(response, reverse('posts:index'))
+        self.assertRedirects(response, reverse('Posts:index'))
 
     # 表示
 
