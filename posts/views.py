@@ -1,9 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView
+from django.views.generic import CreateView,ListView,DeleteView
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
 
+class IndexView(ListView):
+  model = Post
+  template_name = 'posts/index.html'
+  context_object_name = 'posts'
+  ordering = '-created_at'
+
+class PostDetailView(DetailView):
+  model=Post
+  template_name='posts/detail.html'
+# Create your views here.
 
 
 
