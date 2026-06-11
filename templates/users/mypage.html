@@ -3,16 +3,14 @@
 {% load static %}
 
 <div class="field">
-  <p>{{ user.nickname }}さんの情報</p>
-  {{ user.nickname}}
-  {{ user.profile }}
-  {{ user.belonging }}
-  {{user.role}}
+  <p>{{ profile_user.nickname }}さんの情報</p>
+  {{ profile_user.nickname }}
+  {{ profile_user.profile }}
+  {{ profile_user.belonging }}
+  {{ profile_user.role }}
 </div>
-
-
 <div class="contents row">
-  <p>{{ user.nickname }}さんのプロトタイプ</p>
+  <p>{{ profile_user.nickname }}さんのプロトタイプ</p>
   {% include "posts/_post_list.html" %}
 </div>
 
