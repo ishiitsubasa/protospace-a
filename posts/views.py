@@ -8,6 +8,7 @@ class IndexView(ListView):
   context_object_name = 'posts'
   ordering = '-created_at'
 
-class DetailView(DetailView):
+class PostDetailView(DetailView):
   model=Post
   template_name='posts/detail.html'
+# Create your views here.
