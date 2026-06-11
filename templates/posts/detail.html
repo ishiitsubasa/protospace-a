@@ -2,19 +2,21 @@
 {% load static %}
 {% block content %}
 <div class="contents row">
-  <div class="contents_post" style="background-image: url('{{ post.image.url }}');">
-    {{ post.catchphrase }}
-    {{ post.concept }}
-    {% if user.is_authenticated %}
+  <div class="contents_post" style="{% if post.image %}background-image: url('{{ post.image.url }}');{% endif %}">
+    <h2>{{ post.name }}</h2>
+    <p>投稿者: {{ post.user.nickname }}</p>
+    <p>{{ post.catchphrase }}</p>
+    <p>{{ post.concept }}</p>
+    {% if user == post.user %}
     <ul>
       <li>
         <form action="{% url 'Posts:delete' post.id %}" method="post">
           {% csrf_token %}
-          <input type="submit" class="delete-btn" value="削除">
+          <input type="submit" class="delete-btn" value="削除する">
         </form>
       </li>
       <li>
-        <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集</a>
+        <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
       </li>
     </ul>
     {% endif %}
