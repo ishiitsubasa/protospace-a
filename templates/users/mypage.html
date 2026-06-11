@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="field">
+  <p>{{ profile_user.nickname }}さんの情報</p>
+  {{ profile_user.nickname }}
+  {{ profile_user.profile }}
+  {{ profile_user.belonging }}
+  {{ profile_user.role }}
+</div>
+<div class="contents row">
+  <p>{{ profile_user.nickname }}さんのプロトタイプ</p>
+  {% include "posts/_post_list.html" %}
+</div>
+
+{% endblock content %}
