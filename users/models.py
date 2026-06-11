@@ -10,8 +10,8 @@ class CustomUserManager(BaseUserManager):
     user = self.model(
             email=self.normalize_email(email),
         )
-    if password and len(password) < 8:
-       raise ValidationError('パスワードは8文字以上で入力してください。')
+    if password and len(password) < 6:
+       raise ValidationError('パスワードは6文字以上で入力してください。')
     
     user = self.model(email=email, nickname=nickname, **extra_fields)
     user.set_password(password)
@@ -20,7 +20,6 @@ class CustomUserManager(BaseUserManager):
 
   
 class CustomUser(AbstractBaseUser):
-    email=models.EmailField(unique=True,blank=False,null=False)
     nickname = models.CharField(max_length=10, blank=False, null=False, error_messages={'blank': 'このフィールドは必須です。'})
     profile = models.CharField(max_length=100, blank=False, null=False, error_messages={'blank': 'このフィールドは必須です。'})
     belonging = models.TextField(blank=False, null=False, error_messages={'blank': 'このフィールドは必須です。'})
