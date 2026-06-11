@@ -17,4 +17,5 @@ class PostCreateView(CreateView):
     post.user = self.request.user
     post.save()
     return super().form_valid(form)
+
   
