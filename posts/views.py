@@ -1,6 +1,12 @@
 from django.shortcuts import render
-from django.views.generic import DetailView
+from django.views.generic import ListView, DetailView
 from .models import Post
+
+class IndexView(ListView):
+  model = Post
+  template_name = 'posts/index.html'
+  context_object_name = 'posts'
+  ordering = '-created_at'
 
 class PostDetailView(DetailView):
   model=Post
