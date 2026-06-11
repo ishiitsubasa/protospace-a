@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content%}
+
 {% if form.errors %}
   <div class="error-summary">
     <ul>
@@ -14,4 +18,4 @@
 {{form.concept}}
 {{form.image}}
 <button type="submit">保存する</button>
-{%{% endblock %}%}
+{% endblock %}
