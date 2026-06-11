@@ -15,3 +15,5 @@ urlpatterns = [
   path('posts/<int:pk>',PostDetailView.as_view(), name='detail'),
 
 ]
+  
+
