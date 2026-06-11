@@ -5,7 +5,7 @@ from tests.factories.posts import PostFactory
 class PostIndexViewTest(TestCase):
 
     def setUp(self):
-        self.post = PostFactory()
+        self.post = PostFactory.build()
 
     def test_index_status_code(self):
         response = self.client.get(reverse('Posts:index'))

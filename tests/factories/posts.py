@@ -1,20 +1,21 @@
-from django.test import TestCase
-from django.urls import reverse
-from tests.factories.posts import PostFactory
+import factory
+from django.contrib.auth import get_user_model
+from posts.models import Post
+from django.core.files.uploadedfile import SimpleUploadedFile
+from tests.factories.users import UserFactory
 
-class PostIndexViewTest(TestCase):
+User = get_user_model()
 
-    def setUp(self):
-        self.post = PostFactory()
+class PostFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Post
 
-    def test_index_status_code(self):
-        response = self.client.get(reverse('Posts:index'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_index_template(self):
-        response = self.client.get(reverse('Posts:index'))
-        self.assertTemplateUsed(response, 'posts/index.html')
-
-    def test_index_contains_post(self):
-        response = self.client.get(reverse('Posts:index'))
-        self.assertContains(response, self.post.name)
+    name = factory.Faker('word')
+    catchphrase = factory.Faker('sentence')
+    concept = factory.Faker('paragraph')
+    image = factory.LazyAttribute(lambda _: SimpleUploadedFile(
+        name='test_image.jpg',
+        content=b'',
+        content_type='image/jpeg'
+    ))
+    user = factory.SubFactory(UserFactory)
