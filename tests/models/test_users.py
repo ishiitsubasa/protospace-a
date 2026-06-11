@@ -22,7 +22,7 @@ class UserModelTestCase(TestCase):
         with self.assertRaises(ValidationError) as cm:
             self.user.full_clean()
         self.assertIn('profile', cm.exception.message_dict)
-        self.assertEqual(cm.exception.message_dict['profile'], ['このフィールドは必須です。'])
+        self.assertEqual(cm.exception.message_dict['profile'], ['このフィールドは空ではいけません。'])
 
     def test_user_belonging_cannot_be_blank(self):
         self.user.belonging = ''

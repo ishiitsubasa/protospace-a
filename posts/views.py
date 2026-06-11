@@ -29,5 +29,11 @@ class PostCreateView(CreateView):
     return super().form_valid(form)
 
 
+class  PostDeleteView(DeleteView):
+  model=Post
+  success_url=reverse_lazy('Posts:index')
+   
+
+
 
   
