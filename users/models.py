@@ -24,7 +24,7 @@ class CustomUser(AbstractBaseUser):
     nickname = models.CharField(max_length=10, blank=False, null=False)
     profile = models.CharField(max_length=100, blank=False, null=False)
     belonging = models.TextField(blank=False, null=False)
-    role = models.CharField(blank=False, null=False)
+    role = models.CharField(max_length=15,blank=False, null=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nickname']
