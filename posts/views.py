@@ -1,9 +1,20 @@
 from django.shortcuts import render, redirect
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, ListView, DetailView
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+class IndexView(ListView):
+  model = Post
+  template_name = 'posts/index.html'
+  context_object_name = 'posts'
+  ordering = '-created_at'
+
+class PostDetailView(DetailView):
+  model=Post
+  template_name='posts/detail.html'
 
 class UpdateView(LoginRequiredMixin, UpdateView):
   model = Post
