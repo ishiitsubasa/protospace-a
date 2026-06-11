@@ -20,7 +20,7 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
         if len(password) < 6:
-            raise forms.ValidationError('パスワードは8文字以上で入力してください。')
+            raise forms.ValidationError('パスワードは6文字以上で入力してください。')
         return password
 
     def clean_password2(self):
