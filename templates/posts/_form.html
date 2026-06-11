@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content%}
+
+{% if form.errors %}
+  <div class="error-summary">
+    <ul>
+      {% for field in form %}
+        {% for error in field.errors %}
+          <li><strong>{{ field.label }}:</strong>{{ error }}</li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+{{form.name}}
+{{form.catchphrase}}
+{{form.concept}}
+{{form.image}}
+<button type="submit">保存する</button>
+{% endblock %}
