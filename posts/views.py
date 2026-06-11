@@ -28,4 +28,6 @@ class PostCreateView(CreateView):
     post.save()
     return super().form_valid(form)
 
+
+
   
