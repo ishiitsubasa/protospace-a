@@ -4,7 +4,7 @@
   <div class="content_post">
     <div class="more">
       <span><img src="{% static 'images/arrow_top.png' %}"></span>
-      <h2><a href="{% url '#posts:detail' post.pk %}">{{ post.name }}</a></h2>
+      <h2><a href="{% url 'posts:detail' post.pk %}">{{ post.name }}</a></h2>
       <p class=catchphrase>{{ post.catchphrase }}</p>
       <span class="user">by <a href="{% url 'users:mypage' post.user.pk %}">
         <span>投稿者</span>{{ post.user.nickname }}</a></span>
