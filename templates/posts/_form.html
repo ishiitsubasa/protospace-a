@@ -13,9 +13,12 @@
     </ul>
   </div>
 {% endif %}
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
 {{form.name}}
 {{form.catchphrase}}
 {{form.concept}}
 {{form.image}}
 <button type="submit">保存する</button>
+</form>
 {% endblock %}
