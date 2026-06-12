@@ -10,6 +10,13 @@ class SignUpView(CreateView):
  form_class = CustomUserCreationForm
  success_url = reverse_lazy('Posts:index')
  template_name = 'users/sign_up.html'
+ 
+ def form_valid(self, form):
+    # バリデーションが成功したら、ユーザーを作成してそのユーザーでログインさせる
+    response = super().form_valid(form)
+    user = form.save()
+    login(self.request, user)
+    return response
 
 
 
