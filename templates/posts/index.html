@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<p>{{ user.nickname }}さんこんにちは</p>
+<p class="greeting">こんにちは、<a class='' href="{% url 'users:mypage' user.pk %}">{{ user.nickname }}さん</a></p>
 {% endif %}
 
 <div class="contents row">
