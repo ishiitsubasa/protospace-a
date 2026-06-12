@@ -34,13 +34,14 @@ class PostCreateView(CreateView):
 class  PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
   model=Post
   success_url=reverse_lazy('Posts:index')
-  form_class=PostForm
   template_name = 'posts/detail.html'
 
   def test_func(self):
     post=self.get_object()
 
     return post.user==self.request.user
+
+
 class PostUpdateView(LoginRequiredMixin, UpdateView):
   model = Post
   form_class = PostForm
