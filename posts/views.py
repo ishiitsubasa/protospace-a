@@ -3,6 +3,8 @@ from django.views.generic import CreateView,ListView,DeleteView,DetailView
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from posts.forms import PostForm
 
 class IndexView(ListView):
   model = Post
@@ -29,9 +31,23 @@ class PostCreateView(CreateView):
     return super().form_valid(form)
 
 
-class  PostDeleteView(DeleteView):
+class  PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
   model=Post
   success_url=reverse_lazy('Posts:index')
+  form_class=PostForm
+
+  def test_func(self):
+    post=self.get_object()
+
+    return post.user==self.request.user
+
+  
+  
+  
+    
+
+
+      
    
 
 
