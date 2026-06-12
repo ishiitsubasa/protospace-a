@@ -364,3 +364,33 @@ footer p {
 .submit-btn:hover {
   background-color: #3aadd4;
 }
+
+.delete-btn {
+  padding: 6px 14px;
+  background-color: #e24b4a;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: inherit;
+}
+
+.delete-btn:hover {
+  background-color: #c03a39;
+}
+
+.update-btn {
+  display: inline-block;
+  padding: 6px 14px;
+  background-color: #57C3E9;
+  color: #fff;
+  border-radius: 3px;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.update-btn:hover {
+  background-color: #3aadd4;
+}
