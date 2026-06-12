@@ -3,7 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 
 class CustomUserCreationForm(UserCreationForm):
-    # 確認用パスワードフィールドを追加
     password1 = forms.CharField(
         label='パスワード',
         widget=forms.PasswordInput,
@@ -15,7 +14,16 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ['email', 'nickname', 'profile','belonging', 'role', 'password1', 'password2']
+        fields = ['email', 'nickname', 'profile', 'belonging', 'role', 'password1', 'password2']
+        widgets = {
+            'nickname': forms.TextInput(attrs={'maxlength': '10'}),  # ← 追加
+        }
+
+    def clean_nickname(self):  # ← 追加
+        nickname = self.cleaned_data.get('nickname')
+        if len(nickname) > 10:
+            raise forms.ValidationError('ニックネームは10文字以内で入力してください。')
+        return nickname
 
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
@@ -26,8 +34,6 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
-        
-        # 2つのパスワードが一致するか確認
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError('パスワードが一致しません。')
         return password2
