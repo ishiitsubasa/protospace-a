@@ -3,7 +3,9 @@
 {% for post in posts %}
   <div class="content_post">
     <div class="more">
-      <span><img src="{{ post.image.url }}"></span>
+      {% if post.image %}
+        <span><img src="{{ post.image.url }}"></span>
+      {% endif %}
       <h2><a href="{% url 'Posts:detail' post.pk %}">{{ post.name }}</a></h2>
       <p class=catchphrase>{{ post.catchphrase }}</p>
       <span class="user">by <a href="{% url 'users:mypage' post.user.pk %}">
