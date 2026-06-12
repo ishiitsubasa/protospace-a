@@ -1,17 +1,12 @@
-{% extends "base.html" %}
 {% load static %}
 {% block content %}
 
-
-
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <div class="contents row">
-    <div class="container">
-      <h3>プロトタイプ投稿</h3>
-       {% include "posts/_form.html" %}
-    </div>
+<div class="contents row">
+  <div class="container">
+    <h3>プロトタイプ投稿</h3>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% include "posts/_form.html" %}
+    </form>
   </div>
 </div>
-
-{% endblock %}
