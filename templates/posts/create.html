@@ -5,7 +5,7 @@
 <div class="contents row">
   <div class="container">
     <h3>新規プロトタイプ投稿</h3>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="form-wrapper">
       {% csrf_token %}
       {% include "posts/_form.html" %}
     </form>

@@ -249,7 +249,7 @@ main {
   display: block;
 }
 
-.form-wrapper input[type="submit"] {
+.form-wrapper button[type="submit"] {
   padding: 8px 20px;
   background-color: #57C3E9;
   color: #fff;
@@ -261,7 +261,7 @@ main {
   font-family: inherit;
 }
 
-.form-wrapper input[type="submit"]:hover {
+.form-wrapper button[type="submit"]:hover {
   background-color: #3aadd4;
 }
 
@@ -313,7 +313,7 @@ main {
 }
 
 .container textarea {
-  min-height: 70px;
+  min-height: 50px;
   resize: vertical;
 }
 
@@ -323,7 +323,7 @@ main {
   display: block;
 }
 
-.container input[type="submit"] {
+.container button[type="submit"] {
   padding: 8px 20px;
   background-color: #57C3E9;
   color: #fff;
@@ -335,7 +335,7 @@ main {
   font-family: inherit;
 }
 
-.container input[type="submit"]:hover {
+.container button[type="submit"]:hover {
   background-color: #3aadd4;
 }
 

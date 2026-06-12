@@ -1,15 +1,17 @@
 {% load static %}
-
+<div class="card-grid">
 {% for post in posts %}
-  <div class="content_post">
-    <div class="more">
-      {% if post.image %}
-        <span><img src="{{ post.image.url }}"></span>
-      {% endif %}
-      <h2><a href="{% url 'Posts:detail' post.pk %}">{{ post.name }}</a></h2>
-      <p class=catchphrase>{{ post.catchphrase }}</p>
-      <span class="user">by <a href="{% url 'users:mypage' post.user.pk %}">
-        <span>投稿者</span>{{ post.user.nickname }}</a></span>
-    </div>
+<div class="card">
+  {% if post.image %}
+  <img class="card__thumbnail" src="{{ post.image.url }}">
+  {% else %}
+  <div class="card__thumbnail"></div>
+  {% endif %}
+  <div class="card__body">
+    <h2 class="card__title"><a href="{% url 'Posts:detail' post.pk %}">{{ post.name }}</a></h2>
+    <p class="card__description">{{ post.catchphrase }}</p>
+    <span class="card__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></span>
   </div>
+</div>
 {% endfor %}
+</div>
