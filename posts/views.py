@@ -15,10 +15,21 @@ class IndexView(ListView):
   context_object_name = 'posts'
   ordering = '-created_at'
 
-class PostCreateView(CreateView):
+class PostDetailView(DetailView):
+  model=Post
+  template_name='posts/detail.html'
+# Create your views here.
+
+
+
+class PostCreateView(LoginRequiredMixin,CreateView):
   form_class=PostForm
   template_name='posts/create.html'
   success_url=reverse_lazy("Posts:index")
+
+  login_url='Posts:index'
+  
+  redirect_field_name=None
 
   def form_valid(self,form):
     post=form.save(commit=False)
