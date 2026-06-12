@@ -2,6 +2,10 @@
 {% load static %}
 {% block content %}
 
+{% if user.is_authenticated %}
+<p>{{ user.nickname }}さんこんにちは</p>
+{% endif %}
+
 <div class="contents row">
 {% include "posts/_post_list.html" %}
 </div>
