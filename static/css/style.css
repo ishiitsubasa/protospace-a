@@ -12,6 +12,9 @@ img { display: block; max-width: 100%; }
 
 /* ===== Base ===== */
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
   font-size: 14px;
   color: #333;
@@ -34,7 +37,7 @@ a:hover {
   left: 0;
   right: 0;
   height: 60px;
-  background-color: #eaf4f8;
+  background-color: #F1F8FE;
   z-index: 100;
 }
 
@@ -91,30 +94,25 @@ a:hover {
 }
 
 /* ログアウトボタン */
-.user_nav form {
-  display: inline;
-}
-
 .user_nav form button {
   font-size: 13px;
-  color: #555;
+  color: #57C3E9;
   background: none;
   border: none;
   cursor: pointer;
   font-family: inherit;
-  transition: color 0.2s;
   padding: 0;
 }
 
 .user_nav form button:hover {
-  color: #57C3E9;
+  opacity: 0.7;
 }
 
 /* 投稿する / ログイン / 新規登録 */
 a.post {
   font-size: 12px;
-  color: #57C3E9;
-  border: 1px solid #57C3E9;
+  color: #87CEFA;
+  border: 1px solid #87CEFA;
   border-radius: 3px;
   padding: 5px 14px;
   transition: all 0.2s;
@@ -138,6 +136,10 @@ a.post:hover {
 .greeting a {
   color: #57C3E9;
   text-decoration: underline;
+}
+
+main {
+  flex: 1;
 }
 
 /* ===== Contents ===== */
@@ -342,11 +344,14 @@ footer {
   background-color: #999999;
   padding: 16px;
   text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 footer p {
   font-size: 11px;
-  color: #bbb;
+  color: #FFFFFF;
 }
 
 .submit-btn {
