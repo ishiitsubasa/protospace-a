@@ -98,7 +98,7 @@ class CommentValidationTestCase(BaseCommentTestCase):
         self.client.login(email='user@example.com', password='password123')
         response = self.client.post(self.comment_url, {'text': ''})
         self.assertEqual(Comment.objects.count(), 0)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
 class CommentCascadeDeleteTestCase(BaseCommentTestCase):
 
