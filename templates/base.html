@@ -18,7 +18,7 @@
             {% csrf_token %} 
             <button type="submit">ログアウト</button>
           </form>
-          <a class="post" href='{% url 'Posts:create' %}'>投稿する</a>
+          <a class="post" href="{% url 'Posts:create' %}">投稿する</a>
         </div>
       {% else %}
         <div class="grid-6">
