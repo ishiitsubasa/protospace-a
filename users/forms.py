@@ -48,6 +48,7 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
     
+     # ← これを追加！usernameを除外する
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if 'username' in self.fields:

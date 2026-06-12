@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-{%load static%}
-{% block content%}
+{% load static %}
 
 {% if form.errors %}
   <div class="error-summary">
@@ -13,9 +11,8 @@
     </ul>
   </div>
 {% endif %}
-{{form.name}}
-{{form.catchphrase}}
-{{form.concept}}
-{{form.image}}
-<button type="submit">保存する</button>
-{% endblock %}
+{{ form.name }}
+{{ form.catchphrase }}
+{{ form.concept }}
+{{ form.image }}
+<button type="submit" class="submit-btn">保存する</button>
