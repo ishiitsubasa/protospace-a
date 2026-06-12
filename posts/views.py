@@ -5,10 +5,12 @@ from .models import Post
 from .forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin,CreateView):
   form_class=PostForm
   template_name='posts/create.html'
   success_url=reverse_lazy("Posts:index")
+  login_url='Posts:index'
+  redirect_field_name=None
 
   def form_valid(self,form):
     post=form.save(commit=False)
