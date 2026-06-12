@@ -8,7 +8,7 @@
     <p>{{ post.catchphrase }}</p>
     <p>{{ post.concept }}</p>
     {% if user == post.user %}
-    {% comment %} <ul>
+    <ul>
       <li>
         <form action="{% url 'Posts:delete' post.id %}" method="post">
           {% csrf_token %}
@@ -18,7 +18,7 @@
       <li>
         <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
       </li>
-    </ul> {% endcomment %}
+    </ul>
     {% endif %}
   </div>
   {% include 'comments/_comment.html' %}
