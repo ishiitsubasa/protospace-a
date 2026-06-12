@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<p>{{ profile_user.nickname }}さんこんにちは</p>
+<p>{{ user.nickname }}さんこんにちは</p>
 {% endif %}
 
 <div class="contents row">
