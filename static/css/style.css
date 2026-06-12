@@ -12,6 +12,9 @@ img { display: block; max-width: 100%; }
 
 /* ===== Base ===== */
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
   font-size: 14px;
   color: #333;
@@ -34,7 +37,7 @@ a:hover {
   left: 0;
   right: 0;
   height: 60px;
-  background-color: #eaf4f8;
+  background-color: #F1F8FE;
   z-index: 100;
 }
 
@@ -91,30 +94,25 @@ a:hover {
 }
 
 /* ログアウトボタン */
-.user_nav form {
-  display: inline;
-}
-
 .user_nav form button {
   font-size: 13px;
-  color: #555;
+  color: #57C3E9;
   background: none;
   border: none;
   cursor: pointer;
   font-family: inherit;
-  transition: color 0.2s;
   padding: 0;
 }
 
 .user_nav form button:hover {
-  color: #57C3E9;
+  opacity: 0.7;
 }
 
 /* 投稿する / ログイン / 新規登録 */
 a.post {
   font-size: 12px;
-  color: #57C3E9;
-  border: 1px solid #57C3E9;
+  color: #87CEFA;
+  border: 1px solid #87CEFA;
   border-radius: 3px;
   padding: 5px 14px;
   transition: all 0.2s;
@@ -131,13 +129,26 @@ a.post:hover {
   max-width: 960px;
   margin: 24px auto 0;
   padding: 0 40px;
-  font-size: 13px;
+  font-size: 16px;
   color: #555;
 }
 
 .greeting a {
   color: #57C3E9;
   text-decoration: underline;
+}
+
+main {
+  flex: 1;
+}
+
+.greeting a {
+  color: #3B4043;
+  text-decoration: underline;
+}
+
+.greeting a:hover {
+  color: #3aadd4;
 }
 
 /* ===== Contents ===== */
@@ -148,6 +159,15 @@ a.post:hover {
 }
 
 /* ===== カードグリッド ===== */
+.author-link a {
+  color: #aaa;
+  text-decoration: underline;
+}
+
+.author-link a:hover {
+  color: #57C3E9;
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -174,23 +194,83 @@ a.post:hover {
 }
 
 .card__title {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
   color: #333;
   margin-bottom: 4px;
 }
 
 .card__description {
-  font-size: 12px;
+  font-size: 15px;
   color: #888;
   line-height: 1.5;
   margin-bottom: 10px;
 }
 
 .card__author {
-  font-size: 11px;
+
+  font-size: 15px;
   color: #aaa;
   text-align: right;
+  display: block;
+}
+
+/* ====detailview ====*/
+.detail-container {
+  max-width: 640px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.detail__body {
+  text-align: center;
+  padding: 20px;
+}
+
+.detail__body h3 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.detail__body p {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.detail__actions {
+  margin-top: 12px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.update-btn {
+  padding: 6px 16px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 13px;
+  color: #555;
+  text-decoration: none;
+}
+
+.delete-btn {
+  padding: 6px 16px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 13px;
+  color: #555;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.update-btn:hover,
+.delete-btn:hover {
+  border-color: #57C3E9;
+  color: #57C3E9;
 }
 
 /* ===== Form ===== */
@@ -247,7 +327,7 @@ a.post:hover {
   display: block;
 }
 
-.form-wrapper input[type="submit"] {
+.form-wrapper button[type="submit"] {
   padding: 8px 20px;
   background-color: #57C3E9;
   color: #fff;
@@ -259,7 +339,7 @@ a.post:hover {
   font-family: inherit;
 }
 
-.form-wrapper input[type="submit"]:hover {
+.form-wrapper button[type="submit"]:hover {
   background-color: #3aadd4;
 }
 
@@ -311,7 +391,7 @@ a.post:hover {
 }
 
 .container textarea {
-  min-height: 70px;
+  min-height: 50px;
   resize: vertical;
 }
 
@@ -321,7 +401,7 @@ a.post:hover {
   display: block;
 }
 
-.container input[type="submit"] {
+.container button[type="submit"] {
   padding: 8px 20px;
   background-color: #57C3E9;
   color: #fff;
@@ -333,20 +413,23 @@ a.post:hover {
   font-family: inherit;
 }
 
-.container input[type="submit"]:hover {
+.container button[type="submit"]:hover {
   background-color: #3aadd4;
 }
 
 /* ===== Footer ===== */
 footer {
-  background-color: #444;
+  background-color: #999999;
   padding: 16px;
   text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 footer p {
   font-size: 11px;
-  color: #bbb;
+  color: #FFFFFF;
 }
 
 .submit-btn {
@@ -365,32 +448,41 @@ footer p {
   background-color: #3aadd4;
 }
 
-.delete-btn {
-  padding: 6px 14px;
-  background-color: #e24b4a;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-family: inherit;
+/* === mypage ==== */
+.mypage-container {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 40px;
 }
 
-.delete-btn:hover {
-  background-color: #c03a39;
+.mypage__title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16px;
 }
 
-.update-btn {
-  display: inline-block;
-  padding: 6px 14px;
-  background-color: #57C3E9;
-  color: #fff;
-  border-radius: 3px;
-  font-size: 12px;
-  transition: background-color 0.2s;
+.mypage__table {
+  width: 50%;
+  border-collapse: collapse;
+  margin-bottom: 40px;
 }
 
-.update-btn:hover {
-  background-color: #3aadd4;
+.mypage__table th,
+.mypage__table td {
+  padding: 16px;
+  border: 1px solid #e8e8e8;
+  font-size: 14px;
+}
+
+.mypage__table th {
+  width: 160px;
+  font-weight: bold;
+  color: #333;
+  background-color: #f9f9f9;
+  text-align: left;
+}
+
+.mypage__table td {
+  color: #555;
 }
