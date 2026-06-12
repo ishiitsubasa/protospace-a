@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from .models import Post
+from django.views.generic.edit import FormMixin
+from comments.forms import CommentForm
+from comments.models import Comment
 from .forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from posts.forms import PostForm
@@ -19,10 +22,14 @@ class PostDetailView(DetailView):
 
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin,CreateView):
   form_class=PostForm
   template_name='posts/create.html'
   success_url=reverse_lazy("Posts:index")
+
+  login_url='Posts:index'
+  
+  redirect_field_name=None
 
   def form_valid(self,form):
     post=form.save(commit=False)
@@ -31,16 +38,28 @@ class PostCreateView(CreateView):
     return super().form_valid(form)
 
 
+class PostDetailView(FormMixin, DetailView):
+    model = Post
+    template_name = 'posts/detail.html'
+    form_class = CommentForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(post=self.object).select_related('user')
+        context['form'] = self.get_form()
+        return context
+
 class  PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
   model=Post
   success_url=reverse_lazy('Posts:index')
-  form_class=PostForm
-  template_name = 'posts/detail.html'
+
 
   def test_func(self):
     post=self.get_object()
 
     return post.user==self.request.user
+
+
 class PostUpdateView(LoginRequiredMixin, UpdateView):
   model = Post
   form_class = PostForm
