@@ -16,10 +16,13 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
         fields = ['email', 'nickname', 'profile', 'belonging', 'role', 'password1', 'password2']
         widgets = {
-            'nickname': forms.TextInput(attrs={'maxlength': '10'}),  # ← 追加
+            'nickname': forms.TextInput(attrs={'maxlength': '10', 'placeholder': '名前'}),
+            'profile': forms.TextInput(attrs={'placeholder': 'プロフィール'}),
+            'belonging': forms.TextInput(attrs={'placeholder': '所属'}),
+            'role': forms.TextInput(attrs={'placeholder': '役職'}),
         }
 
-    def clean_nickname(self):  # ← 追加
+    def clean_nickname(self):
         nickname = self.cleaned_data.get('nickname')
         if len(nickname) > 10:
             raise forms.ValidationError('ニックネームは10文字以内で入力してください。')
