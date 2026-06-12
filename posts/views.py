@@ -34,7 +34,7 @@ class PostCreateView(CreateView):
 class  PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
   model=Post
   success_url=reverse_lazy('Posts:index')
-  template_name = 'posts/detail.html'
+
 
   def test_func(self):
     post=self.get_object()
