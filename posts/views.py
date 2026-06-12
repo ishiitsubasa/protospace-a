@@ -3,7 +3,21 @@ from django.views.generic import CreateView, UpdateView, ListView, DetailView, D
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from posts.forms import PostForm
+
+class IndexView(ListView):
+  model = Post
+  template_name = 'posts/index.html'
+  context_object_name = 'posts'
+  ordering = '-created_at'
+
+class PostDetailView(DetailView):
+  model=Post
+  template_name='posts/detail.html'
+# Create your views here.
+
+
 
 class PostCreateView(CreateView):
   form_class=PostForm
@@ -16,16 +30,17 @@ class PostCreateView(CreateView):
     post.save()
     return super().form_valid(form)
 
-class IndexView(ListView):
-  model = Post
-  template_name = 'posts/index.html'
-  context_object_name = 'posts'
-  ordering = '-created_at'
 
-class PostDetailView(DetailView):
+class  PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
   model=Post
-  template_name='posts/detail.html'
+  success_url=reverse_lazy('Posts:index')
+  form_class=PostForm
+  template_name = 'posts/detail.html'
 
+  def test_func(self):
+    post=self.get_object()
+
+    return post.user==self.request.user
 class PostUpdateView(LoginRequiredMixin, UpdateView):
   model = Post
   form_class = PostForm
@@ -49,3 +64,17 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
   def get_success_url(self):
       # 編集成功後は詳細ページへ
       return reverse_lazy('Posts:detail', kwargs={'pk': self.object.pk})
+
+
+  
+  
+  
+    
+
+
+      
+   
+
+
+
+  
