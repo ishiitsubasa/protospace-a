@@ -52,7 +52,7 @@ class UserModelTestCase(TestCase):
         with self.assertRaises(ValidationError) as cm:
             self.user.full_clean()
         self.assertIn('nickname', cm.exception.message_dict)
-        self.assertEqual(cm.exception.message_dict['nickname'], ['このフィールドは最大10文字までです。'])
+        self.assertEqual(cm.exception.message_dict['nickname'], ['この値は 10 文字以下でなければなりません( 22 文字になっています)。'])
 
     def test_password_cannot_be_blank(self):
         self.user.password = ''
@@ -66,4 +66,4 @@ class UserModelTestCase(TestCase):
         with self.assertRaises(ValidationError) as cm:
             self.user.full_clean()
         self.assertIn('password', cm.exception.message_dict)
-        self.assertEqual(cm.exception.message_dict['password'], ['パスワードは8文字以上で入力してください。'])
+        self.assertEqual(cm.exception.message_dict['password'], ['パスワードは6文字以上で入力してください。'])

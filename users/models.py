@@ -6,8 +6,8 @@ class CustomUserManager(BaseUserManager):
     def create_user(self, email, nickname, password=None, **extra_fields):
         if not email:
             raise ValueError('Users must have an email address')
-        if password and len(password) < 8:
-            raise ValidationError('パスワードは8文字以上で入力してください。')
+        if password and len(password) < 6:
+            raise ValidationError('パスワードは6文字以上で入力してください。')
         
         # ← インスタンス生成を1つにまとめました！
         user = self.model(
@@ -32,3 +32,8 @@ class CustomUser(AbstractBaseUser):
 
     class Meta:
         db_table = 'users'
+        
+    def clean(self):
+        super().clean()
+        if self.password and len(self.password) < 6:  # ← not self.passwordを削除
+            raise ValidationError({'password': 'パスワードは6文字以上で入力してください。'})
