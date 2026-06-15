@@ -64,6 +64,8 @@ main {
   color: #888;
   letter-spacing: 0.3em;
   text-transform: uppercase;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
 }
 
 .header__bar h1.grid-6 {
@@ -75,16 +77,12 @@ main {
 
 .header__bar h1.grid-6 a {
   color: #333;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
 }
 
 .header__bar h1.grid-6 a:hover {
   color: #57C3E9;
-}
-
-.header__bar > p,
-.header__bar h1.grid-6 a {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 300;
 }
 
 .logo-accent {
@@ -325,8 +323,7 @@ a.post:hover {
   display: block;
 }
 
-.form-wrapper button[type="submit"],
-.form-wrapper input[type="submit"] {
+.form-wrapper button[type="submit"] {
   padding: 8px 20px;
   background-color: #57C3E9;
   color: #fff;
@@ -338,8 +335,7 @@ a.post:hover {
   font-family: inherit;
 }
 
-.form-wrapper button[type="submit"]:hover,
-.form-wrapper input[type="submit"]:hover {
+.form-wrapper button[type="submit"]:hover {
   background-color: #3aadd4;
 }
 
@@ -350,7 +346,7 @@ a.post:hover {
   border-radius: 4px;
   padding: 30px 40px;
   margin: 30px auto;
-  max-width: 800px;
+  max-width: 560px;
 }
 
 .container h3 {
