@@ -1,6 +1,6 @@
 databases:
   - name: protospace-a_db
-    databaseName: protospace-a_db
+    databaseName: protospace_db
     user: mysite
     region: ohio
     plan: free
