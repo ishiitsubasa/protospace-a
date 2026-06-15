@@ -345,7 +345,7 @@ a.post:hover {
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   padding: 30px 40px;
-  margin: 30px auto;
+  margin: 30px auto 80px;
   max-width: 560px;
 }
 
@@ -498,4 +498,11 @@ footer p {
 
 .mypage__table td {
   color: #555;
+}
+
+.detail__image {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  border-radius: 4px;
 }
