@@ -468,6 +468,23 @@ footer p {
   margin-bottom: 40px;
 }
 
+.update-btn:hover {
+  background-color: #3aadd4;
+}
+
+.header__bar > p,
+.header__bar h1.grid-6 a {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+}
+
+.header__bar > p {
+  letter-spacing: 0.3em;
+}
+
+.logo-accent {
+  color: #7EC8D8;
+}
 .mypage__table th,
 .mypage__table td {
   padding: 16px;
