@@ -30,6 +30,10 @@ a:hover {
   color: #57C3E9;
 }
 
+main {
+  flex: 1;
+}
+
 /* ===== Header ===== */
 .header {
   position: fixed;
@@ -52,18 +56,16 @@ a:hover {
   position: relative;
 }
 
-/* SHARE THE PROTOTYPE */
 .header__bar > p {
   position: absolute;
   top: 8px;
   left: 40px;
   font-size: 9px;
   color: #888;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
 }
 
-/* PROTO SPACE */
 .header__bar h1.grid-6 {
   font-size: 20px;
   font-weight: bold;
@@ -79,21 +81,28 @@ a:hover {
   color: #57C3E9;
 }
 
-/* ログアウト・投稿するエリア */
+.header__bar > p,
+.header__bar h1.grid-6 a {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+}
+
+.logo-accent {
+  color: #7EC8D8;
+}
+
 .user_nav.grid-6 {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-/* ログインエリア */
 .grid-6 {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-/* ログアウトボタン */
 .user_nav form button {
   font-size: 13px;
   color: #57C3E9;
@@ -108,7 +117,6 @@ a:hover {
   opacity: 0.7;
 }
 
-/* 投稿する / ログイン / 新規登録 */
 a.post {
   font-size: 12px;
   color: #87CEFA;
@@ -131,15 +139,6 @@ a.post:hover {
   padding: 0 40px;
   font-size: 16px;
   color: #555;
-}
-
-.greeting a {
-  color: #57C3E9;
-  text-decoration: underline;
-}
-
-main {
-  flex: 1;
 }
 
 .greeting a {
@@ -208,14 +207,13 @@ main {
 }
 
 .card__author {
-
   font-size: 15px;
   color: #aaa;
   text-align: right;
   display: block;
 }
 
-/* ====detailview ====*/
+/* ===== Detail ===== */
 .detail-container {
   max-width: 640px;
   margin: 40px auto;
@@ -327,7 +325,8 @@ main {
   display: block;
 }
 
-.form-wrapper button[type="submit"] {
+.form-wrapper button[type="submit"],
+.form-wrapper input[type="submit"] {
   padding: 8px 20px;
   background-color: #57C3E9;
   color: #fff;
@@ -339,18 +338,19 @@ main {
   font-family: inherit;
 }
 
-.form-wrapper button[type="submit"]:hover {
+.form-wrapper button[type="submit"]:hover,
+.form-wrapper input[type="submit"]:hover {
   background-color: #3aadd4;
 }
 
-/* ===== Container（フォームボックス） ===== */
+/* ===== Container ===== */
 .container {
-  background-color: #fff;
+  background-color: #f0f0f0;
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   padding: 30px 40px;
   margin: 30px auto;
-  max-width: 560px;
+  max-width: 800px;
 }
 
 .container h3 {
@@ -370,8 +370,7 @@ main {
 
 .container input[type="text"],
 .container input[type="email"],
-.container input[type="password"],
-.container textarea {
+.container input[type="password"] {
   width: 100%;
   padding: 8px 10px;
   border: 1px solid #ccc;
@@ -381,18 +380,32 @@ main {
   color: #333;
   margin-bottom: 16px;
   outline: none;
+  background-color: #fff;
 }
 
 .container input[type="text"]:focus,
 .container input[type="email"]:focus,
-.container input[type="password"]:focus,
-.container textarea:focus {
+.container input[type="password"]:focus {
   border-color: #57C3E9;
 }
 
 .container textarea {
-  min-height: 50px;
-  resize: vertical;
+  width: 100%;
+  height: 36px;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #333;
+  margin-bottom: 16px;
+  outline: none;
+  background-color: #fff;
+  resize: none;
+}
+
+.container textarea:focus {
+  border-color: #57C3E9;
 }
 
 .container input[type="file"] {
@@ -401,7 +414,9 @@ main {
   display: block;
 }
 
-.container button[type="submit"] {
+.container button[type="submit"],
+.container input[type="submit"],
+.submit-btn {
   padding: 8px 20px;
   background-color: #57C3E9;
   color: #fff;
@@ -413,8 +428,26 @@ main {
   font-family: inherit;
 }
 
-.container button[type="submit"]:hover {
+.container button[type="submit"]:hover,
+.container input[type="submit"]:hover,
+.submit-btn:hover {
   background-color: #3aadd4;
+}
+
+/* ===== Comments ===== */
+.comments {
+  margin-top: 16px;
+}
+
+.comments p {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.comments a {
+  color: #888;
+  font-size: 12px;
 }
 
 /* ===== Footer ===== */
@@ -432,23 +465,7 @@ footer p {
   color: #FFFFFF;
 }
 
-.submit-btn {
-  padding: 8px 20px;
-  background-color: #57C3E9;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-family: inherit;
-}
-
-.submit-btn:hover {
-  background-color: #3aadd4;
-}
-
-/* === mypage ==== */
+/* ===== Mypage ===== */
 .mypage-container {
   max-width: 960px;
   margin: 40px auto;
@@ -468,23 +485,6 @@ footer p {
   margin-bottom: 40px;
 }
 
-.update-btn:hover {
-  background-color: #3aadd4;
-}
-
-.header__bar > p,
-.header__bar h1.grid-6 a {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 300;
-}
-
-.header__bar > p {
-  letter-spacing: 0.3em;
-}
-
-.logo-accent {
-  color: #7EC8D8;
-}
 .mypage__table th,
 .mypage__table td {
   padding: 16px;
@@ -502,21 +502,4 @@ footer p {
 
 .mypage__table td {
   color: #555;
-}
-
-/* ===== # ログインページ ==== */
-.container input[type="submit"] {
-  padding: 8px 20px;
-  background-color: #57C3E9;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-family: inherit;
-}
-
-.container input[type="submit"]:hover {
-  background-color: #3aadd4;
 }
