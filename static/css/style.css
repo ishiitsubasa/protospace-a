@@ -503,3 +503,20 @@ footer p {
 .mypage__table td {
   color: #555;
 }
+
+/* ===== # ログインページ ==== */
+.container input[type="submit"] {
+  padding: 8px 20px;
+  background-color: #57C3E9;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: inherit;
+}
+
+.container input[type="submit"]:hover {
+  background-color: #3aadd4;
+}
