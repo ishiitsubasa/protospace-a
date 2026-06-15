@@ -1,29 +1,32 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="contents row">
-  <div class="contents_post">
-    {% if post.image %}
-      <span><img src="{{ post.image.url }}" alt="{{ post.name }}"></span>
-    {% endif %}
-    <h2>{{ post.name }}</h2>
-    <p>投稿者: {{ post.user.nickname }}</p>
-    <p>{{ post.catchphrase }}</p>
-    <p>{{ post.concept }}</p>
-    {% if user == post.user %}
-        <ul>
-      <li>
-        <form action="{% url 'Posts:delete' post.id %}" method="post">
-          {% csrf_token %}
-          <input type="submit" class="delete-btn" value="削除する">
-        </form>
-      </li>
-      <li>
-        <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
-      </li>
-    </ul> 
-    {% endif %}
+<div class="detail-container">
+
+  <h2 class="detail__title">{{ post.name }}</h2>
+  <p class="detail__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></p>
+
+  {% if user == post.user %}
+  <div class="detail__actions">
+    <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
+    <form action="{% url 'Posts:delete' post.id %}" method="post" style="display:inline">
+      {% csrf_token %}
+      <input type="submit" class="delete-btn" value="削除する">
+    </form>
   </div>
+  {% endif %}
+
+  {% if post.image %}
+  <img class="detail__image" src="{{ post.image.url }}" alt="{{ post.name }}">
+  {% endif %}
+
+  <div class="detail__body">
+    <h3>キャッチコピー</h3>
+    <p>{{ post.catchphrase }}</p>
+    <h3>コンセプト</h3>
+    <p>{{ post.concept }}</p>
+  </div>
+
   {% include 'comments/_comment.html' %}
 </div>
 {% endblock %}

@@ -11,14 +11,14 @@
   <header class="header">
     <div class="header__bar row">
       <p>SHARE THE PROTOTYPE</p>
-      <h1 class="grid-6"><a href="{% url 'Posts:index' %}">PROTO SPACE</a></h1>
+      <h1 class="grid-6"><a href="{% url 'Posts:index' %}">PRO<span class="logo-accent">TO</span> SPACE</a></h1>
       {% if user.is_authenticated %}
         <div class="user_nav grid-6">  
           <form method="POST" action="{% url 'users:logout' %}"> 
             {% csrf_token %} 
             <button type="submit">ログアウト</button>
           </form>
-          <a class="post" href="{% url 'Posts:create' %}">投稿する</a>
+          <a class="post" href="{% url 'Posts:create' %}">New Proto</a>
         </div>
       {% else %}
         <div class="grid-6">
@@ -29,7 +29,7 @@
       {% endif %}
     </div>
   </header>
-  {% block content %}{% endblock content %}
+  <main>{% block content %}{% endblock content %}</main>
 
   <footer>
     <p>

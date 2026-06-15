@@ -11,4 +11,4 @@ class UserFactory(factory.django.DjangoModelFactory):
     nickname = factory.LazyAttribute(lambda obj: faker.Faker().first_name()[:10])
     profile = factory.LazyAttribute(lambda obj: faker.Faker().text()[:100])
     belonging = factory.LazyAttribute(lambda obj: faker.Faker().company()[:50])
-    role = factory.LazyAttribute(lambda obj: faker.Faker().job()[:50])
+    role = factory.LazyAttribute(lambda obj: faker.Faker().job()[:15])
