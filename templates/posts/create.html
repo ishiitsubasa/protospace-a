@@ -4,12 +4,12 @@
 
 <div class="contents row">
   <div class="container">
-    <h3>プロトタイプ投稿</h3>
-    <form method="post" enctype="multipart/form-data">
+    <h3>新規プロトタイプ投稿</h3>
+    <form method="post" enctype="multipart/form-data" class="form-wrapper">
       {% csrf_token %}
       {% include "posts/_form.html" %}
     </form>
   </div>
 </div>
 
-{% endblock %}
+{% endblock content %}

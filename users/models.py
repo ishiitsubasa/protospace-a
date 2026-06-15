@@ -32,3 +32,8 @@ class CustomUser(AbstractBaseUser):
 
     class Meta:
         db_table = 'users'
+        
+    def clean(self):
+        super().clean()
+        if self.password and len(self.password) < 6:  # ← not self.passwordを削除
+            raise ValidationError({'password': 'パスワードは6文字以上で入力してください。'})
