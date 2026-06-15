@@ -15,7 +15,7 @@ class UserModelTestCase(TestCase):
         with self.assertRaises(ValidationError) as cm:
             self.user.full_clean()
         self.assertIn('nickname', cm.exception.message_dict)
-        self.assertEqual(cm.exception.message_dict['nickname'], ['このフィールドは必須です。'])
+        self.assertEqual(cm.exception.message_dict['nickname'], ['このフィールドは空ではいけません。'])
 
     def test_user_profile_cannot_be_blank(self):
         self.user.profile = ''
@@ -29,14 +29,14 @@ class UserModelTestCase(TestCase):
         with self.assertRaises(ValidationError) as cm:
             self.user.full_clean()
         self.assertIn('belonging', cm.exception.message_dict)
-        self.assertEqual(cm.exception.message_dict['belonging'], ['このフィールドは必須です。'])
+        self.assertEqual(cm.exception.message_dict['belonging'], ['このフィールドは空ではいけません。'])
 
     def test_email_cannot_be_blank(self):
         self.user.email = ''
         with self.assertRaises(ValidationError) as cm:
             self.user.full_clean()
         self.assertIn('email', cm.exception.message_dict)
-        self.assertEqual(cm.exception.message_dict['email'], ['このフィールドは必須です。'])
+        self.assertEqual(cm.exception.message_dict['email'], ['このフィールドは空ではいけません。'])
 
     def test_unique_email_constraint(self):
         self.user.save()
@@ -59,11 +59,11 @@ class UserModelTestCase(TestCase):
         with self.assertRaises(ValidationError) as cm:
             self.user.full_clean()
         self.assertIn('password', cm.exception.message_dict)
-        self.assertEqual(cm.exception.message_dict['password'], ['このフィールドは必須です。'])
+        self.assertEqual(cm.exception.message_dict['password'], ['このフィールドは空ではいけません。'])
 
     def test_password_minimum_length(self):
         self.user.password = 'a'*3
         with self.assertRaises(ValidationError) as cm:
             self.user.full_clean()
         self.assertIn('password', cm.exception.message_dict)
-        self.assertEqual(cm.exception.message_dict['password'], ['パスワードは6文字以上で入力してください。'])
+        self.assertEqual(cm.exception.message_dict['password'], ['パスワードは8文字以上で入力してください。'])
