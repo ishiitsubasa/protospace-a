@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Comment
 from .forms import CommentForm
 from posts.models import Post
+from notifications.models import Notification
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
@@ -13,9 +14,19 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         post_id = self.kwargs['pk']
         post = get_object_or_404(Post, pk=post_id)
-        form.instance.user = self.request.user  # ← saveせずにインスタンスに直接セット
-        form.instance.post = post               # ← saveせずにインスタンスに直接セット
-        return super().form_valid(form)         # ← saveはsuper()に一度だけ任せる
+        form.instance.user = self.request.user
+        form.instance.post = post
+
+        response = super().form_valid(form)  # ここでcommentが1回だけ保存される
+
+        # 自分の投稿へのコメントは通知しない
+        if post.user != self.request.user:
+            Notification.objects.get_or_create(
+                comment=self.object,
+                defaults={'user': post.user}
+            )
+
+        return response
 
     def form_invalid(self, form):
         return redirect('Posts:detail', pk=self.kwargs['pk'])
