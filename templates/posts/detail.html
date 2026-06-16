@@ -27,6 +27,22 @@
     <p>{{ post.concept }}</p>
   </div>
 
+  <div class="like-section like-section--center">
+    {% if user.is_authenticated and user != post.user %}
+    <button class="like-btn like-btn--large {% if user_liked %}liked{% endif %}"
+            data-post-id="{{ post.pk }}"
+            data-url="{% url 'Posts:like' post.pk %}">
+      <span class="like-icon">&#9829;</span>
+      <span class="like-count">{{ like_count }}</span>
+    </button>
+    {% else %}
+    <div class="like-display like-display--large">
+      <span class="like-icon">&#9829;</span>
+      <span class="like-count">{{ like_count }}</span>
+    </div>
+    {% endif %}
+  </div>
+
   {% include 'comments/_comment.html' %}
 </div>
 {% endblock %}

@@ -1,6 +1,7 @@
 {% load static %}
 <div class="card-grid">
   {% for post in posts %}
+  {% if post.pk not in trending_ids %}
   <div class="card">
     {% if post.image %}
     <img class="card__thumbnail" src="{{ post.image.url }}">
@@ -28,5 +29,6 @@
       </div>
     </div>
   </div>
+  {% endif %}
   {% endfor %}
 </div>

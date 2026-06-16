@@ -506,6 +506,137 @@ footer p {
   margin: 0 auto;
   border-radius: 4px;
 }
+/* Like button */
+.like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1.5px solid #ccc;
+  border-radius: 20px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #999;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.like-btn:hover {
+  border-color: #e05a7a;
+  color: #e05a7a;
+}
+
+.like-btn.liked {
+  border-color: #e05a7a;
+  color: #e05a7a;
+}
+
+.like-btn.liked .like-icon {
+  color: #e05a7a;
+}
+
+.like-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #999;
+}
+
+/* Detail page like section */
+.like-section {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Card footer with author + like */
+.card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.like-section--center {
+  justify-content: center;
+}
+
+.like-btn--large {
+  font-size: 21px;
+  padding: 6px 20px;
+  gap: 6px;
+}
+
+.like-display--large {
+  font-size: 21px;
+  gap: 6px;
+}
+
+/* Subheader bar */
+.subheader-bar-wrap {
+  background-color: #fff;
+}
+
+.subheader-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 8px 40px;
+}
+
+.subheader-bar .greeting {
+  margin: 0;
+  padding: 0;
+}
+
+/* Sort bar */
+.sort-bar {
+  display: flex;
+  gap: 8px;
+}
+
+.sort-btn {
+  padding: 6px 18px;
+  border: 1.5px solid #ccc;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.sort-btn:hover {
+  border-color: #57C3E9;
+  color: #57C3E9;
+}
+
+.sort-btn--active {
+  border-color: #57C3E9;
+  color: #57C3E9;
+  font-weight: bold;
+}
+
+/* Trending section */
+.trending-section {
+  padding: 24px 24px 0;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.trending-section__title {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12px;
+  letter-spacing: 0.03em;
+}
+
+.trending-section + .contents {
+  margin-top: 32px;
+}
 
 /* ===== Notification Bell ===== */
 .notification-bell {
