@@ -16,8 +16,8 @@ def create_comment_notification(sender, instance, created, **kwargs):
     if post_author == commenter:
         return
 
-    Notification.objects.create(
-        user=post_author,       # ← recipient から user に変更
+    # ↓ 既に通知が存在する場合は作らない
+    Notification.objects.get_or_create(
         comment=instance,
-        # read_at は指定しない → NULLのまま = 未読
+        defaults={'user': post_author}
     )
