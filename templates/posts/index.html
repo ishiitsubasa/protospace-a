@@ -1,12 +1,36 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block subheader %}
+<div class="subheader-bar-wrap">
+  <div class="subheader-bar">
+    {% if user.is_authenticated %}
+    <p class="greeting">こんにちは、<a href="{% url 'users:mypage' user.pk %}">{{ user.nickname }}さん</a></p>
+    {% else %}
+    <span></span>
+    {% endif %}
+    <div class="sort-bar">
+      <a href="?sort=new" class="sort-btn {% if current_sort == 'new' %}sort-btn--active{% endif %}">新着順</a>
+      <a href="?sort=likes" class="sort-btn {% if current_sort == 'likes' %}sort-btn--active{% endif %}">いいね数順</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
 {% block content %}
 
-{% if user.is_authenticated %}
-<p class="greeting">こんにちは、<a class='' href="{% url 'users:mypage' user.pk %}">{{ user.nickname }}さん</a></p>
+{% if trending_posts %}
+<div class="trending-section">
+  <h2 class="trending-section__title">&#127894;&#65039; 2週間の人気プロトタイプ</h2>
+  <div class="contents row">
+    {% with posts=trending_posts %}
+    {% include "posts/_post_list.html" %}
+    {% endwith %}
+  </div>
+</div>
 {% endif %}
 
 <div class="contents row">
-{% include "posts/_post_list.html" %}
+  {% include "posts/_post_list_filtered.html" %}
 </div>
 {% endblock %}

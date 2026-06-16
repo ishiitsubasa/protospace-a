@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from .models import Post, Like
+from django.db import models
+from django.db.models import Count, Q
+from django.utils import timezone
+from datetime import timedelta
 from django.views.generic.edit import FormMixin
 from comments.forms import CommentForm
 from comments.models import Comment
@@ -16,15 +20,38 @@ class IndexView(ListView):
   model = Post
   template_name = 'posts/index.html'
   context_object_name = 'posts'
-  ordering = '-created_at'
+
+  def get_queryset(self):
+    sort = self.request.GET.get('sort', 'new')
+    qs = Post.objects.all()
+    if sort == 'likes':
+      qs = qs.annotate(like_count=models.Count('likes')).order_by('-like_count', '-created_at')
+    else:
+      qs = qs.order_by('-created_at')
+    return qs
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
+    sort = self.request.GET.get('sort', 'new')
+    context['current_sort'] = sort
     if self.request.user.is_authenticated:
       liked_ids = set(Like.objects.filter(user=self.request.user).values_list('post_id', flat=True))
       context['liked_post_ids'] = liked_ids
     else:
       context['liked_post_ids'] = set()
+    if sort == 'new':
+      two_weeks_ago = timezone.now() - timedelta(weeks=2)
+      trending = (
+        Post.objects
+        .annotate(recent_likes=Count('likes', filter=Q(likes__created_at__gte=two_weeks_ago)))
+        .filter(recent_likes__gt=0)
+        .order_by('-recent_likes', '-created_at')[:3]
+      )
+      context['trending_posts'] = list(trending)
+      context['trending_ids'] = {p.pk for p in context['trending_posts']}
+    else:
+      context['trending_posts'] = []
+      context['trending_ids'] = set()
     return context
 
 class PostDetailView(DetailView):
