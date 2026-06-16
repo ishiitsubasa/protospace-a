@@ -15,7 +15,7 @@ class Comment(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.user != self.post.user:
-            from notifications.models import Notification  # 循環import防止のため関数内でimport
+            from notifications.models import Notification  
             Notification.objects.create(
                 user=self.post.user,
                 comment=self
