@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('posts.urls')),
     path('users/',include('users.urls')),
-    path('comments/',include('comments.urls'))
+    path('comments/',include('comments.urls')),
+    path("notifications/", include("notifications.urls")),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
