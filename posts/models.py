@@ -12,4 +12,11 @@ class Post(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-# Create your models here.
+
+class Like(models.Model):
+  class Meta:
+    db_table = 'likes'
+    unique_together = ('user', 'post')
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+  created_at = models.DateTimeField(auto_now_add=True)

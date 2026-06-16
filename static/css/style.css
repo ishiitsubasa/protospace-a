@@ -506,3 +506,54 @@ footer p {
   margin: 0 auto;
   border-radius: 4px;
 }
+/* Like button */
+.like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1.5px solid #ccc;
+  border-radius: 20px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #999;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.like-btn:hover {
+  border-color: #e05a7a;
+  color: #e05a7a;
+}
+
+.like-btn.liked {
+  border-color: #e05a7a;
+  color: #e05a7a;
+}
+
+.like-btn.liked .like-icon {
+  color: #e05a7a;
+}
+
+.like-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #999;
+}
+
+/* Detail page like section */
+.like-section {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Card footer with author + like */
+.card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}

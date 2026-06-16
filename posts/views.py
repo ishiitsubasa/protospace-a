@@ -1,19 +1,31 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
 from django.urls import reverse_lazy
-from .models import Post
+from .models import Post, Like
 from django.views.generic.edit import FormMixin
 from comments.forms import CommentForm
 from comments.models import Comment
 from .forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from posts.forms import PostForm
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 
 class IndexView(ListView):
   model = Post
   template_name = 'posts/index.html'
   context_object_name = 'posts'
   ordering = '-created_at'
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    if self.request.user.is_authenticated:
+      liked_ids = set(Like.objects.filter(user=self.request.user).values_list('post_id', flat=True))
+      context['liked_post_ids'] = liked_ids
+    else:
+      context['liked_post_ids'] = set()
+    return context
 
 class PostDetailView(DetailView):
   model=Post
@@ -44,6 +56,11 @@ class PostDetailView(FormMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(post=self.object).select_related('user')
         context['form'] = self.get_form()
+        context['like_count'] = self.object.likes.count()
+        context['user_liked'] = (
+            self.request.user.is_authenticated and
+            Like.objects.filter(user=self.request.user, post=self.object).exists()
+        )
         return context
 
 class  PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
@@ -82,15 +99,15 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
       return reverse_lazy('Posts:detail', kwargs={'pk': self.object.pk})
 
 
-  
-  
-  
-    
+@login_required
+@require_POST
+def toggle_like(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    like, created = Like.objects.get_or_create(user=request.user, post=post)
+    if not created:
+        like.delete()
+        liked = False
+    else:
+        liked = True
+    return JsonResponse({'liked': liked, 'count': post.likes.count()})
 
-
-      
-   
-
-
-
-  
