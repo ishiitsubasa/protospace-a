@@ -12,11 +12,4 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.user != self.post.user:
-            from notifications.models import Notification  
-            Notification.objects.create(
-                user=self.post.user,
-                comment=self
-            )
+  
