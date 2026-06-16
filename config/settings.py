@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'users',
     'comments',
     'notifications',
+    'notifications.apps.NotificationsConfig',
 ]
 
 MIDDLEWARE = [
