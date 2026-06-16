@@ -13,11 +13,9 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         post_id = self.kwargs['pk']
         post = get_object_or_404(Post, pk=post_id)
-        comment = form.save(commit=False)
-        comment.user = self.request.user
-        comment.post = post
-        comment.save()
-        return super().form_valid(form)
+        form.instance.user = self.request.user  # ← saveせずにインスタンスに直接セット
+        form.instance.post = post               # ← saveせずにインスタンスに直接セット
+        return super().form_valid(form)         # ← saveはsuper()に一度だけ任せる
 
     def form_invalid(self, form):
         return redirect('Posts:detail', pk=self.kwargs['pk'])
