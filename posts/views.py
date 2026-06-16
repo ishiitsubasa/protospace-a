@@ -103,6 +103,8 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 @require_POST
 def toggle_like(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    if post.user == request.user:
+        return JsonResponse({'error': 'forbidden'}, status=403)
     like, created = Like.objects.get_or_create(user=request.user, post=post)
     if not created:
         like.delete()

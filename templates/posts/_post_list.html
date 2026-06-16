@@ -12,7 +12,7 @@
       <p class="card__description">{{ post.catchphrase }}</p>
       <div class="card__footer">
         <span class="card__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></span>
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user != post.user %}
         <button class="like-btn {% if post.pk in liked_post_ids %}liked{% endif %}"
                 data-post-id="{{ post.pk }}"
                 data-url="{% url 'Posts:like' post.pk %}">

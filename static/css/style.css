@@ -557,3 +557,18 @@ footer p {
   justify-content: space-between;
   margin-top: 8px;
 }
+
+.like-section--center {
+  justify-content: center;
+}
+
+.like-btn--large {
+  font-size: 21px;
+  padding: 6px 20px;
+  gap: 6px;
+}
+
+.like-display--large {
+  font-size: 21px;
+  gap: 6px;
+}
