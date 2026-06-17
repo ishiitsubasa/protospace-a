@@ -1,0 +1,67 @@
+{% load static %}
+<div class="vote-section" id="sympathy-section"
+     data-url="{% url 'Posts:sympathy_vote' post.pk %}"
+     data-post-id="{{ post.pk }}">
+
+  <h3 class="vote-section__title">共感投票</h3>
+  <p class="vote-section__note">投票は匿名で集計されます</p>
+
+  {% if not user.is_authenticated %}
+  <p class="vote-section__disabled">投票にはログインが必要です</p>
+
+  {% elif user == post.user %}
+  <p class="vote-section__disabled">自分のアイデアには投票できません</p>
+
+  {% else %}
+  <div class="sympathy-buttons" id="sympathy-buttons">
+    <button class="sympathy-btn sympathy-btn--yes {% if user_sympathy_vote == 'yes' %}selected{% endif %}" data-value="yes">共感する</button>
+    <button class="sympathy-btn sympathy-btn--maybe {% if user_sympathy_vote == 'maybe' %}selected{% endif %}" data-value="maybe">どちらとも</button>
+    <button class="sympathy-btn sympathy-btn--no {% if user_sympathy_vote == 'no' %}selected{% endif %}" data-value="no">共感しない</button>
+  </div>
+  <button class="vote-submit-btn" id="sympathy-submit" {% if not user_sympathy_vote %}disabled{% endif %}>投票する</button>
+  {% if user_sympathy_vote %}<p class="vote-section__voted-msg" id="sympathy-voted-msg">投票済み（変更できます）</p>{% endif %}
+  {% endif %}
+
+  <div class="sympathy-result" id="sympathy-result">
+    {% if sympathy_summary.total > 0 %}
+    <div class="sympathy-highlight">
+      <span class="sympathy-highlight__pct">
+        {% widthratio sympathy_summary.yes sympathy_summary.total 100 %}%
+      </span>
+      <span class="sympathy-highlight__label">が共感</span>
+    </div>
+    <div class="stack-bar">
+      <div class="stack-bar__yes"  style="width:{% widthratio sympathy_summary.yes  sympathy_summary.total 100 %}%"></div>
+      <div class="stack-bar__maybe" style="width:{% widthratio sympathy_summary.maybe sympathy_summary.total 100 %}%"></div>
+      <div class="stack-bar__no"   style="width:{% widthratio sympathy_summary.no   sympathy_summary.total 100 %}%"></div>
+    </div>
+    <div class="stack-bar__legend">
+      <span class="legend-yes">共感する {% widthratio sympathy_summary.yes sympathy_summary.total 100 %}%</span>
+      <span class="legend-maybe">一部共感 {% widthratio sympathy_summary.maybe sympathy_summary.total 100 %}%</span>
+      <span class="legend-no">共感しない {% widthratio sympathy_summary.no sympathy_summary.total 100 %}%</span>
+      <span class="legend-total">{{ sympathy_summary.total }}票</span>
+    </div>
+
+    {% if sympathy_summary.dept_breakdown %}
+    <div class="dept-grid">
+      {% for dept, counts in sympathy_summary.dept_breakdown.items %}
+      {% with dept_total=counts.yes|add:counts.maybe|add:counts.no %}
+      <div class="dept-card">
+        <p class="dept-card__name">{{ dept }}</p>
+        <div class="stack-bar stack-bar--sm">
+          <div class="stack-bar__yes"  style="width:{% widthratio counts.yes   dept_total 100 %}%"></div>
+          <div class="stack-bar__maybe" style="width:{% widthratio counts.maybe dept_total 100 %}%"></div>
+          <div class="stack-bar__no"   style="width:{% widthratio counts.no    dept_total 100 %}%"></div>
+        </div>
+        <p class="dept-card__rate">共感 {% widthratio counts.yes dept_total 100 %}%（{{ dept_total }}票）</p>
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <p class="vote-section__empty">まだ投票がありません</p>
+    {% endif %}
+  </div>
+</div>

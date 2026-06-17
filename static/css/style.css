@@ -742,3 +742,340 @@ footer p {
   padding: 24px 0;
   text-align: center;
 }
+/* ===== Vote sections ===== */
+.vote-section {
+  max-width: 640px;
+  margin: 32px auto;
+  padding: 24px 28px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background: #fff;
+  text-align: left;
+}
+
+.vote-section__title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.vote-section__question {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.vote-section__note {
+  font-size: 11px;
+  color: #aaa;
+  margin-bottom: 16px;
+}
+
+.vote-section__disabled {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 12px;
+}
+
+.vote-section__voted-msg {
+  font-size: 12px;
+  color: #888;
+  margin-top: 8px;
+}
+
+.vote-section__empty {
+  font-size: 13px;
+  color: #bbb;
+  margin-top: 16px;
+}
+
+/* Sympathy buttons */
+.sympathy-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sympathy-btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  border: 2px solid #e8e8e8;
+  background: #fafafa;
+  color: #555;
+  transition: all 0.15s;
+}
+
+.sympathy-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.sympathy-btn--yes.selected,
+.sympathy-btn--yes:not(:disabled):active {
+  background: #d4edda;
+  border-color: #4caf50;
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.sympathy-btn--maybe.selected,
+.sympathy-btn--maybe:not(:disabled):active {
+  background: #fff9c4;
+  border-color: #f9a825;
+  color: #795548;
+  font-weight: bold;
+}
+
+.sympathy-btn--no.selected,
+.sympathy-btn--no:not(:disabled):active {
+  background: #fde8e8;
+  border-color: #e53935;
+  color: #b71c1c;
+  font-weight: bold;
+}
+
+.sympathy-btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.sympathy-btn.selected:disabled {
+  opacity: 1;
+}
+
+/* Pain score buttons */
+.pain-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.pain-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #e8e8e8;
+  background: #fafafa;
+  font-size: 16px;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.pain-btn:hover:not(:disabled) {
+  border-color: #57C3E9;
+  color: #57C3E9;
+}
+
+.pain-btn.selected {
+  background: #57C3E9;
+  border-color: #57C3E9;
+  color: #fff;
+}
+
+.pain-btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.pain-btn.selected:disabled {
+  opacity: 1;
+}
+
+.pain-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #aaa;
+  margin-bottom: 12px;
+}
+
+.pain-selected-label {
+  font-size: 12px;
+  color: #57C3E9;
+  font-weight: bold;
+}
+
+/* Submit button */
+.vote-submit-btn {
+  padding: 8px 24px;
+  background: #57C3E9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 20px;
+}
+
+.vote-submit-btn:hover:not(:disabled) {
+  background: #3aadd4;
+}
+
+.vote-submit-btn:disabled {
+  background: #ccc;
+  cursor: default;
+}
+
+/* Stack bar */
+.stack-bar {
+  display: flex;
+  height: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f0f0f0;
+  margin: 12px 0 6px;
+}
+
+.stack-bar--sm {
+  height: 10px;
+  margin: 6px 0 4px;
+}
+
+.stack-bar__yes   { background: #4caf50; }
+.stack-bar__maybe { background: #f9a825; }
+.stack-bar__no    { background: #e53935; }
+
+.stack-bar__legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.legend-yes   { color: #2e7d32; }
+.legend-maybe { color: #795548; }
+.legend-no    { color: #b71c1c; }
+.legend-total { margin-left: auto; color: #aaa; }
+
+/* Sympathy highlight */
+.sympathy-highlight {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.sympathy-highlight__pct {
+  font-size: 36px;
+  font-weight: bold;
+  color: #4caf50;
+}
+
+.sympathy-highlight__label {
+  font-size: 14px;
+  color: #555;
+  margin-left: 4px;
+}
+
+/* Department grid */
+.dept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.dept-card {
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.dept-card__name {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.dept-card__rate {
+  font-size: 11px;
+  color: #999;
+  margin-top: 2px;
+}
+
+/* Pain metrics */
+.pain-metrics {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.pain-metric {
+  flex: 1;
+  text-align: center;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  padding: 10px 8px;
+}
+
+.pain-metric__value {
+  display: block;
+  font-size: 28px;
+  font-weight: bold;
+  color: #57C3E9;
+}
+
+.pain-metric__label {
+  display: block;
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 2px;
+}
+
+/* Department bar list */
+.dept-bar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dept-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.dept-bar-row__name {
+  width: 80px;
+  flex-shrink: 0;
+  color: #666;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dept-bar-wrap {
+  flex: 1;
+  height: 12px;
+  background: #f0f0f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.dept-bar-fill {
+  height: 100%;
+  background: #57C3E9;
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.dept-bar-row__val {
+  width: 28px;
+  text-align: right;
+  color: #57C3E9;
+  font-weight: bold;
+  font-size: 13px;
+}
