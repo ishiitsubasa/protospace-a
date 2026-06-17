@@ -81,24 +81,16 @@ class PostDetailView(FormMixin, DetailView):
             self.request.user.is_authenticated and
             Like.objects.filter(user=self.request.user, post=self.object).exists()
         )
-        sympathy_summary = _sympathy_summary(self.object)
-        pain_summary = _pain_summary(self.object)
-        context['sympathy_summary'] = sympathy_summary
-        context['pain_summary'] = pain_summary
+        context['sympathy_summary'] = _sympathy_summary(self.object)
+        context['pain_summary'] = _pain_summary(self.object)
         if self.request.user.is_authenticated:
             sv = SympathyVote.objects.filter(post=self.object, user=self.request.user).first()
             context['user_sympathy_vote'] = sv.vote_type if sv else None
             ps = PainScore.objects.filter(post=self.object, user=self.request.user).first()
             context['user_pain_score'] = ps.score if ps else None
-            can_see_matrix = (
-                self.request.user == self.object.user or
-                _is_manager(self.request.user)
-            )
-            context['matrix'] = _matrix_data(sympathy_summary, pain_summary) if can_see_matrix else None
         else:
             context['user_sympathy_vote'] = None
             context['user_pain_score'] = None
-            context['matrix'] = None
         return context
 
 class  PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
@@ -135,47 +127,6 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
   def get_success_url(self):
       # 編集成功後は詳細ページへ
       return reverse_lazy('Posts:detail', kwargs={'pk': self.object.pk})
-
-
-MATRIX_SYMPATHY_THRESHOLD = 60   # 共感率（%）
-MATRIX_PAIN_THRESHOLD = 3.5      # 課題スコア平均
-MATRIX_MIN_COUNT = 5             # 両指標ともこの件数以上で表示
-
-
-def _is_manager(user):
-    return bool(user.role and 'マネージャー' in user.role)
-
-
-def _matrix_data(sympathy_summary, pain_summary):
-    if sympathy_summary['total'] < MATRIX_MIN_COUNT or pain_summary['total'] < MATRIX_MIN_COUNT:
-        return None
-    sympathy_rate = round(sympathy_summary['yes'] / sympathy_summary['total'] * 100, 1)
-    pain_avg = pain_summary['avg']
-    if sympathy_rate >= MATRIX_SYMPATHY_THRESHOLD and pain_avg >= MATRIX_PAIN_THRESHOLD:
-        quadrant = 'immediate'
-        label = '即推進'
-        action = '課題も共感も高い。すぐに推進に移りましょう。'
-    elif sympathy_rate >= MATRIX_SYMPATHY_THRESHOLD and pain_avg < MATRIX_PAIN_THRESHOLD:
-        quadrant = 'refine_idea'
-        label = 'アイデアを磨き直す'
-        action = '共感は得られていますが、課題設定を見直すとさらに説得力が増します。'
-    elif sympathy_rate < MATRIX_SYMPATHY_THRESHOLD and pain_avg >= MATRIX_PAIN_THRESHOLD:
-        quadrant = 'rethink_solution'
-        label = '解決策を練り直す'
-        action = '課題は本物です。解決策のアプローチを変えることで支持が広がるかもしれません。'
-    else:
-        quadrant = 'hold'
-        label = '保留 / 棄却'
-        action = '課題感・共感ともに低め。いったん保留か棄却を検討してください。'
-    return {
-        'sympathy_rate': sympathy_rate,
-        'pain_avg': pain_avg,
-        'quadrant': quadrant,
-        'label': label,
-        'action': action,
-        'x_pct': round(pain_avg / 5 * 100, 1),
-        'y_pct': sympathy_rate,
-    }
 
 
 def _sympathy_summary(post):
