@@ -25,14 +25,15 @@
   }
 
   bell.addEventListener("click", async () => {
+    // ページ遷移前に既読APIを叩く（失敗しても遷移は続ける）
     try {
-      const url = bell.dataset.markReadUrl;
-      await fetch(url, {
-        method: "POST",
-        headers: { "X-CSRFToken": getCsrf() },
-      });
+        const url = bell.dataset.markReadUrl;
+        await fetch(url, {
+            method: "POST",
+            headers: { "X-CSRFToken": getCsrf() },
+        });
     } catch (_) {}
-    updateBadge(0);
+    // hrefへの遷移はそのまま走る
   });
 
   fetchCount();
