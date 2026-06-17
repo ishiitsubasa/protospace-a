@@ -21,7 +21,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser):
    
-    PROFILE_CHOICES = [
+    Belonging_CHOICES = [
         ('engineering', 'エンジニアリング部'),
         ('sales', '営業部'),
         ('marketing', 'マーケティング部'),
@@ -32,12 +32,11 @@ class CustomUser(AbstractBaseUser):
 
     email = models.EmailField(unique=True, blank=False, null=False)
     nickname = models.CharField(max_length=10, blank=False, null=False)
-    profile = models.CharField(
+    belonging = models.CharField(
         max_length=100,
-        choices=PROFILE_CHOICES,
+        choices=Belonging_CHOICES,
         blank=False,
         null=False)
-    belonging = models.TextField(blank=False, null=False)
     role = models.CharField(max_length=15,blank=False, null=False)
 
     USERNAME_FIELD = 'email'
