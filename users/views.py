@@ -14,8 +14,7 @@ class SignUpView(CreateView):
  def form_valid(self, form):
     # バリデーションが成功したら、ユーザーを作成してそのユーザーでログインさせる
     response = super().form_valid(form)
-    user = form.save()
-    login(self.request, user)
+    login(self.request, self.object)
     return response
 
 
