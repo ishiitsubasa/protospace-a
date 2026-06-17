@@ -13,7 +13,7 @@ class PostForm(forms.ModelForm):
     }
     labels={
       'name':'プロトタイプの名称',
-      'catchphrase':'キャッチコピー',
+      'catchphrase':'解決したい課題',
       'concept':'コンセプト',
       'image':'プロトタイプの画像',
 
