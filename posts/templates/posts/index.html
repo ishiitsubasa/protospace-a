@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>ProtoSpace</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .post-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .post-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; }
+    .post-meta { color: #666; font-size: 0.85rem; margin-bottom: 8px; }
+    .post-content { margin-bottom: 12px; }
+    .like-btn {
+      background: none;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      padding: 6px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .like-btn:hover { border-color: #e0245e; color: #e0245e; }
+    .like-btn.liked { background: #fce8ef; border-color: #e0245e; color: #e0245e; }
+    .like-btn .heart { font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>投稿一覧</h1>
+
+  {% for post in posts %}
+  <div class="post-card">
+    <div class="post-title">{{ post.name }}</div>
+    <div class="post-meta">{{ post.user }} &middot; {{ post.created_at|date:"Y/m/d H:i" }}</div>
+    {% if post.catchphrase %}<div class="post-content">{{ post.catchphrase }}</div>{% endif %}
+    {% if post.concept %}<div class="post-content">{{ post.concept }}</div>{% endif %}
+
+    {% if user.is_authenticated %}
+    <button
+      class="like-btn{% if post.liked_by_user %} liked{% endif %}"
+      data-post-id="{{ post.id }}"
+    >
+      <span class="heart">&#10084;</span>
+      <span class="like-count">{{ post.likes_count }}</span>
+    </button>
+    {% else %}
+    <span class="like-btn" style="cursor:default;">
+      <span class="heart">&#10084;</span>
+      <span>{{ post.likes_count }}</span>
+    </span>
+    {% endif %}
+  </div>
+  {% empty %}
+  <p>投稿がまだありません。</p>
+  {% endfor %}
+
+  <script src="{% static 'posts/like.js' %}"></script>
+</body>
+</html>
