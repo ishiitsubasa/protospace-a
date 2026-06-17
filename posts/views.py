@@ -54,13 +54,6 @@ class IndexView(ListView):
       context['trending_ids'] = set()
     return context
 
-class PostDetailView(DetailView):
-  model=Post
-  template_name='posts/detail.html'
-# Create your views here.
-
-
-
 class PostCreateView(LoginRequiredMixin, CreateView):
     form_class = PostForm
     template_name = 'posts/create.html'

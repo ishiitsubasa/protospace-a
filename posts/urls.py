@@ -1,6 +1,5 @@
 from django.urls import path,include
-from .views import PostCreateView
-from .views import IndexView,  PostDetailView,PostDeleteView,PostUpdateView, toggle_like
+from .views import PostCreateView, IndexView,PostDetailView,PostDeleteView,PostUpdateView, toggle_like
 
 app_name='Posts'
 
