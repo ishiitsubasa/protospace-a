@@ -674,3 +674,71 @@ footer p {
 .notification-badge:empty {
   display: none;
 }
+
+/* ===== Notification List ===== */
+.notification-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-item a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #e8e8e8;
+  color: #333;
+  text-decoration: none;
+  gap: 12px;
+  transition: color 0.15s;
+}
+
+.notification-item a:hover {
+  color: #57C3E9;
+}
+
+/* 未読の青ドット */
+.notification-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #57C3E9;
+  flex-shrink: 0;
+}
+
+.notification-item.read .notification-dot {
+  background: transparent;
+}
+
+.notification-body {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.notification-sender {
+  font-weight: bold;
+  color: #333;
+}
+
+.notification-item a:hover .notification-sender {
+  color: #57C3E9;
+}
+
+.notification-post {
+  color: #57C3E9;
+}
+
+.notification-time {
+  font-size: 11px;
+  color: #aaa;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.notification-empty {
+  font-size: 13px;
+  color: #aaa;
+  padding: 24px 0;
+  text-align: center;
+}
