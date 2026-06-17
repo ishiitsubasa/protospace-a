@@ -11,7 +11,7 @@
         <span class="notification-dot"></span>
         <span class="notification-body">
           <span class="notification-sender">{{ notification.comment.user.nickname }}</span>
-          さんが「<span class="notification-post">{{ notification.comment.post.title }}</span>」にコメントしました
+          さんが「<span class="notification-post">{{  notification.comment.post.name  }}</span>」にコメントしました
         </span>
         <span class="notification-time">{{ notification.created_at|date:"m/d H:i" }}</span>
       </a>
