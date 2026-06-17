@@ -1079,3 +1079,155 @@ footer p {
   font-weight: bold;
   font-size: 13px;
 }
+
+/* ===== 2軸マトリクス ===== */
+.matrix-section {
+  position: relative;
+}
+
+.matrix-section__note {
+  font-size: 11px;
+  color: #aaa;
+  margin-bottom: 16px;
+}
+
+.matrix-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.matrix-y-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 260px;
+  position: absolute;
+  left: 0;
+  top: 72px;
+  pointer-events: none;
+}
+
+.matrix-axis-label {
+  font-size: 10px;
+  color: #aaa;
+}
+
+.matrix-grid {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fafafa;
+  margin-left: 64px;
+  width: calc(100% - 64px);
+}
+
+/* 象限背景 */
+.matrix-quadrant {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #ccc;
+  text-align: center;
+  line-height: 1.5;
+  transition: background 0.2s, color 0.2s;
+}
+
+.matrix-quadrant--tl { top: 0;   left: 0; }
+.matrix-quadrant--tr { top: 0;   right: 0; }
+.matrix-quadrant--bl { bottom: 0; left: 0; }
+.matrix-quadrant--br { bottom: 0; right: 0; }
+
+.matrix-quadrant--active {
+  color: #555;
+  font-weight: bold;
+}
+
+.matrix-quadrant--tl.matrix-quadrant--active { background: #fff3e0; }
+.matrix-quadrant--tr.matrix-quadrant--active { background: #e8f5e9; }
+.matrix-quadrant--bl.matrix-quadrant--active { background: #fce4ec; }
+.matrix-quadrant--br.matrix-quadrant--active { background: #e3f2fd; }
+
+/* 閾値線 */
+.matrix-line {
+  position: absolute;
+  background: #ddd;
+  pointer-events: none;
+}
+
+.matrix-line--v {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.matrix-line--h {
+  top: 40%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+}
+
+/* プロット点 */
+.matrix-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transform: translate(-50%, 50%);
+  z-index: 2;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.matrix-dot--immediate      { background: #4caf50; }
+.matrix-dot--refine_idea    { background: #2196f3; }
+.matrix-dot--rethink_solution { background: #ff9800; }
+.matrix-dot--hold           { background: #e53935; }
+
+/* X軸ラベル */
+.matrix-x-label {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 64px;
+  font-size: 10px;
+  color: #aaa;
+}
+
+/* 現在地カード */
+.matrix-result {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 6px;
+  border-left: 4px solid #ccc;
+  background: #fafafa;
+}
+
+.matrix-result--immediate      { border-color: #4caf50; background: #f1f8f1; }
+.matrix-result--refine_idea    { border-color: #2196f3; background: #e8f4fd; }
+.matrix-result--rethink_solution { border-color: #ff9800; background: #fff8e1; }
+.matrix-result--hold           { border-color: #e53935; background: #fdf1f1; }
+
+.matrix-result__label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.matrix-result__values {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.matrix-result__action {
+  font-size: 13px;
+  color: #555;
+}
