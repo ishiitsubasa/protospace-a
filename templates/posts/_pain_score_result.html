@@ -1,0 +1,36 @@
+{% load static %}
+<div class="pain-result" id="pain-result">
+  {% if pain_summary.total > 0 %}
+  <div class="pain-metrics">
+    <div class="pain-metric">
+      <span class="pain-metric__value">{{ pain_summary.avg }}</span>
+      <span class="pain-metric__label">平均スコア</span>
+    </div>
+    <div class="pain-metric">
+      <span class="pain-metric__value">{{ pain_summary.high_rate }}%</span>
+      <span class="pain-metric__label">スコア4以上の割合</span>
+    </div>
+    <div class="pain-metric">
+      <span class="pain-metric__value">{{ pain_summary.total }}</span>
+      <span class="pain-metric__label">回答数</span>
+    </div>
+  </div>
+
+  {% if pain_summary.dept_breakdown %}
+  <div class="dept-bar-list">
+    {% for dept, avg in pain_summary.dept_breakdown.items %}
+    <div class="dept-bar-row">
+      <span class="dept-bar-row__name">{{ dept }}</span>
+      <div class="dept-bar-wrap">
+        <div class="dept-bar-fill" style="width:{% widthratio avg 5 100 %}%"></div>
+      </div>
+      <span class="dept-bar-row__val">{{ avg }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% else %}
+  <p class="vote-section__empty">まだ回答がありません</p>
+  {% endif %}
+</div>
