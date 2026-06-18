@@ -529,6 +529,15 @@ footer p {
   justify-content: center;
 }
 
+.detail__image--full {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  display: block;
+}
+
 .detail__image {
   width: 40%;
   height: 80%;
@@ -543,6 +552,11 @@ footer p {
   flex: 1;
   text-align: left;
   padding: 0;
+}
+
+.detail__vote-col {
+  flex: 1;
+  text-align: left;
 }
 /* Like button */
 .like-btn {
@@ -1325,4 +1339,64 @@ footer p {
 .matrix-result__action {
   font-size: 13px;
   color: #555;
+}
+
+/* ===== 投票切替トグル ===== */
+.vote-toggle-box {
+  margin: 12px 0 20px;
+  padding: 14px 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background: #fafafa;
+  text-align: left;
+}
+
+.vote-toggle__form,
+.vote-toggle__result {
+  transition: opacity 0.3s;
+}
+
+.vote-form-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.voted-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: #e0e0e0;
+  color: #555;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.back-to-form-btn {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: #57C3E9;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.back-to-form-btn:hover {
+  opacity: 0.7;
+}
+
+/* 非活性ボタンのスタイル（状態④） */
+.vote-toggle__form button:disabled.sympathy-btn,
+.vote-toggle__form button:disabled.pain-btn {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vote-toggle__form button:disabled.vote-submit-btn {
+  opacity: 0.45;
+  cursor: not-allowed;
 }

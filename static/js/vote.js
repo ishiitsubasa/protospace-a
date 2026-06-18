@@ -2,28 +2,73 @@ document.addEventListener('DOMContentLoaded', function () {
   var csrfMatch = document.cookie.match(/csrftoken=([^;]+)/);
   var csrf = csrfMatch ? csrfMatch[1] : '';
 
+  // フェードで表示/非表示を切り替えるヘルパー
+  function fadeIn(el) {
+    el.style.display = '';
+    el.style.opacity = '0';
+    el.style.transition = 'opacity 0.3s';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        el.style.opacity = '1';
+      });
+    });
+  }
+
+  function fadeOut(el, callback) {
+    el.style.transition = 'opacity 0.3s';
+    el.style.opacity = '0';
+    setTimeout(function () {
+      el.style.display = 'none';
+      if (callback) callback();
+    }, 300);
+  }
+
+  // フォーム → 結果へ切り替え
+  function showResult(formView, resultView) {
+    fadeOut(formView, function () { fadeIn(resultView); });
+  }
+
+  // 結果 → フォームへ切り替え（再投票可）
+  function showForm(formView, resultView) {
+    fadeOut(resultView, function () { fadeIn(formView); });
+  }
+
   // ---- 共感投票 ----
   var sympathySection = document.getElementById('sympathy-section');
   if (sympathySection) {
     var sympathyUrl = sympathySection.dataset.url;
+    var sympathyVoted = sympathySection.dataset.voted === 'true';
     var selectedVote = null;
     var sympathySubmit = document.getElementById('sympathy-submit');
     var sympathyBtns = document.querySelectorAll('#sympathy-buttons .sympathy-btn');
+    var sympathyFormView = document.getElementById('sympathy-form-view');
+    var sympathyResultView = document.getElementById('sympathy-result-view');
+    var sympathyBackBtn = document.getElementById('sympathy-back-btn');
+
+    // 初期表示: 投票済みなら結果を表示（状態③）
+    if (sympathyVoted && sympathyFormView && sympathyResultView) {
+      sympathyFormView.style.display = 'none';
+      sympathyResultView.style.display = '';
+    } else if (sympathyResultView) {
+      sympathyResultView.style.display = 'none';
+    }
 
     // 既に選択済みのボタンから初期値を読み取る
     sympathyBtns.forEach(function (btn) {
       if (btn.classList.contains('selected')) selectedVote = btn.dataset.value;
     });
 
+    // ボタン選択
     sympathyBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         sympathyBtns.forEach(function (b) { b.classList.remove('selected'); });
         btn.classList.add('selected');
         selectedVote = btn.dataset.value;
-        sympathySubmit.disabled = false;
+        if (sympathySubmit) sympathySubmit.disabled = false;
       });
     });
 
+    // 投票送信
     if (sympathySubmit) {
       sympathySubmit.addEventListener('click', function () {
         if (!selectedVote) return;
@@ -39,20 +84,18 @@ document.addEventListener('DOMContentLoaded', function () {
         })
           .then(function (res) { return res.json(); })
           .then(function (data) {
-            sympathySubmit.disabled = false;
-            if (!data.ok) return;
-            var msg = document.getElementById('sympathy-voted-msg');
-            if (msg) {
-              msg.textContent = '投票済み（変更できます）';
-            } else {
-              msg = document.createElement('p');
-              msg.id = 'sympathy-voted-msg';
-              msg.className = 'vote-section__voted-msg';
-              msg.textContent = '投票済み（変更できます）';
-              sympathySubmit.insertAdjacentElement('afterend', msg);
-            }
+            if (!data.ok) { sympathySubmit.disabled = false; return; }
             renderSympathyResult(data.summary);
+            // 状態②: 結果へ自動切替
+            showResult(sympathyFormView, sympathyResultView);
           });
+      });
+    }
+
+    // 「戻る」ボタン
+    if (sympathyBackBtn) {
+      sympathyBackBtn.addEventListener('click', function () {
+        showForm(sympathyFormView, sympathyResultView);
       });
     }
   }
@@ -113,26 +156,40 @@ document.addEventListener('DOMContentLoaded', function () {
   var painSection = document.getElementById('pain-section');
   if (painSection) {
     var painUrl = painSection.dataset.url;
+    var painVoted = painSection.dataset.voted === 'true';
     var selectedScore = null;
     var painSubmit = document.getElementById('pain-submit');
     var painBtns = document.querySelectorAll('#pain-buttons .pain-btn');
     var selectedLabel = document.getElementById('pain-selected-label');
+    var painFormView = document.getElementById('pain-form-view');
+    var painResultView = document.getElementById('pain-result-view');
+    var painBackBtn = document.getElementById('pain-back-btn');
+
+    // 初期表示: 投票済みなら結果を表示（状態③）
+    if (painVoted && painFormView && painResultView) {
+      painFormView.style.display = 'none';
+      painResultView.style.display = '';
+    } else if (painResultView) {
+      painResultView.style.display = 'none';
+    }
 
     // 既に選択済みのボタンから初期値を読み取る
     painBtns.forEach(function (btn) {
       if (btn.classList.contains('selected')) selectedScore = parseInt(btn.dataset.value);
     });
 
+    // ボタン選択
     painBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         painBtns.forEach(function (b) { b.classList.remove('selected'); });
         btn.classList.add('selected');
         selectedScore = parseInt(btn.dataset.value);
-        painSubmit.disabled = false;
+        if (painSubmit) painSubmit.disabled = false;
         if (selectedLabel) selectedLabel.textContent = PAIN_LABELS[selectedScore];
       });
     });
 
+    // 回答送信
     if (painSubmit) {
       painSubmit.addEventListener('click', function () {
         if (!selectedScore) return;
@@ -148,20 +205,18 @@ document.addEventListener('DOMContentLoaded', function () {
         })
           .then(function (res) { return res.json(); })
           .then(function (data) {
-            painSubmit.disabled = false;
-            if (!data.ok) return;
-            var msg = document.getElementById('pain-voted-msg');
-            if (msg) {
-              msg.textContent = '回答済み（あなたのスコア: ' + selectedScore + '）変更できます';
-            } else {
-              msg = document.createElement('p');
-              msg.id = 'pain-voted-msg';
-              msg.className = 'vote-section__voted-msg';
-              msg.textContent = '回答済み（あなたのスコア: ' + selectedScore + '）変更できます';
-              painSubmit.insertAdjacentElement('afterend', msg);
-            }
+            if (!data.ok) { painSubmit.disabled = false; return; }
             renderPainResult(data.summary);
+            // 状態②: 結果へ自動切替
+            showResult(painFormView, painResultView);
           });
+      });
+    }
+
+    // 「戻る」ボタン
+    if (painBackBtn) {
+      painBackBtn.addEventListener('click', function () {
+        showForm(painFormView, painResultView);
       });
     }
   }

@@ -36,37 +36,27 @@
   </div>
   {% endif %}
 
-  <!-- 行2: 画像（左）＋テキスト・投票UI（右） -->
+  <!-- 行2: 画像（左）＋投票UI（右） -->
   <div class="detail__media-row">
     {% if post.image %}
     <img class="detail__image" src="{{ post.image.url }}" alt="{{ post.name }}">
     {% endif %}
-    <div class="detail__body">
-      <h3>解決したい課題</h3>
-      <p>{{ post.catchphrase }}</p>
-      {% include 'posts/_pain_score_input.html' %}
-
-      <h3>コンセプト</h3>
-      <p>{{ post.concept }}</p>
-      {% include 'posts/_sympathy_vote_input.html' %}
+    <div class="detail__vote-col">
+      {% include 'posts/_pain_score.html' %}
+      {% include 'posts/_sympathy_vote.html' %}
     </div>
   </div>
 
-  <!-- 集計したデータ -->
-  <div class="detail__stats">
-    <h3 class="detail__stats-title">集計したデータ</h3>
-    <div class="detail__stats-row">
-      <div class="detail__stats-col">
-        <p class="detail__stats-label">課題の実感スコア</p>
-        {% include 'posts/_pain_score_result.html' %}
-      </div>
-      <div class="detail__stats-col">
-        <p class="detail__stats-label">アイデアへの共感</p>
-        {% include 'posts/_sympathy_vote_result.html' %}
-      </div>
-    </div>
-    {% include 'posts/_matrix.html' %}
+  <!-- 行3: テキスト（画像の下） -->
+  <div class="detail__body">
+    <h3>解決したい課題</h3>
+    <p>{{ post.catchphrase }}</p>
+    <h3>コンセプト</h3>
+    <p>{{ post.concept }}</p>
   </div>
+
+  <!-- マトリクス（投稿者・管理職のみ） -->
+  {% include 'posts/_matrix.html' %}
 
   {% include 'comments/_comment.html' %}
 </div>
