@@ -1,0 +1,24 @@
+{% load static %}
+<div class="vote-input-box" id="sympathy-section"
+     data-url="{% url 'Posts:sympathy_vote' post.pk %}"
+     data-post-id="{{ post.pk }}">
+
+  <p class="vote-input-box__label">アイデアへの共感投票</p>
+  <p class="vote-input-box__note">投票は匿名で集計されます</p>
+
+  {% if not user.is_authenticated %}
+  <p class="vote-section__disabled">投票にはログインが必要です</p>
+
+  {% elif user == post.user %}
+  <p class="vote-section__disabled">自分のアイデアには投票できません</p>
+
+  {% else %}
+  <div class="sympathy-buttons" id="sympathy-buttons">
+    <button class="sympathy-btn sympathy-btn--yes {% if user_sympathy_vote == 'yes' %}selected{% endif %}" data-value="yes">共感する</button>
+    <button class="sympathy-btn sympathy-btn--maybe {% if user_sympathy_vote == 'maybe' %}selected{% endif %}" data-value="maybe">どちらとも</button>
+    <button class="sympathy-btn sympathy-btn--no {% if user_sympathy_vote == 'no' %}selected{% endif %}" data-value="no">共感しない</button>
+  </div>
+  <button class="vote-submit-btn" id="sympathy-submit" {% if not user_sympathy_vote %}disabled{% endif %}>投票する</button>
+  {% if user_sympathy_vote %}<p class="vote-section__voted-msg" id="sympathy-voted-msg">投票済み（変更できます）</p>{% endif %}
+  {% endif %}
+</div>
