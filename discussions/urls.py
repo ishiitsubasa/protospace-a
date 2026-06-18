@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'discussions'
+app_name = 'discussion'
 
 urlpatterns = [
     path('posts/<int:post_pk>/discussions/', views.DiscussionIndexView.as_view(), name='index'),
