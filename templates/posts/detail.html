@@ -3,26 +3,48 @@
 {% block content %}
 <div class="detail-container">
 
-  <!-- 行1: タイトル（左）＋ハート（右） -->
+  <!-- 行1: タイトル（左）＋議題ドロップダウン＋ハート（右） -->
   <div class="detail__top-bar">
     <div>
       <h2 class="detail__title">{{ post.name }}</h2>
       <p class="detail__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></p>
     </div>
-    <div class="like-section">
-      {% if user.is_authenticated and user != post.user %}
-      <button class="like-btn like-btn--large {% if user_liked %}liked{% endif %}"
-              data-post-id="{{ post.pk }}"
-              data-url="{% url 'Posts:like' post.pk %}">
-        <span class="like-icon">&#9829;</span>
-        <span class="like-count">{{ like_count }}</span>
-      </button>
-      {% else %}
-      <div class="like-display like-display--large">
-        <span class="like-icon">&#9829;</span>
-        <span class="like-count">{{ like_count }}</span>
+    <div style="display: flex; align-items: center; gap: 16px;">
+
+      <!-- 議題ドロップダウン -->
+      <div class="topic-dropdown" data-post-id="{{ post.pk }}">
+        <button class="topic-dropdown__btn">
+          議題一覧
+          <span class="topic-dropdown__arrow"></span>
+        </button>
+        <div class="topic-dropdown__panel">
+          <div class="topic-dropdown__header">
+            <span>議題一覧</span>
+            <a href="{% url 'discussions:create' post.pk %}" class="topic-dropdown__create">＋ 作成する</a>
+          </div>
+          <div class="topic-dropdown__list" id="topic-list-{{ post.pk }}">
+            <p class="topic-dropdown__loading">読み込み中...</p>
+          </div>
+        </div>
       </div>
-      {% endif %}
+
+      <!-- いいね -->
+      <div class="like-section">
+        {% if user.is_authenticated and user != post.user %}
+        <button class="like-btn like-btn--large {% if user_liked %}liked{% endif %}"
+          data-post-id="{{ post.pk }}"
+          data-url="{% url 'Posts:like' post.pk %}">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ like_count }}</span>
+        </button>
+        {% else %}
+        <div class="like-display like-display--large">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ like_count }}</span>
+        </div>
+        {% endif %}
+      </div>
+
     </div>
   </div>
 
@@ -45,7 +67,6 @@
       <h3>解決したい課題</h3>
       <p>{{ post.catchphrase }}</p>
       {% include 'posts/_pain_score_input.html' %}
-
       <h3>コンセプト</h3>
       <p>{{ post.concept }}</p>
       {% include 'posts/_sympathy_vote_input.html' %}
@@ -69,5 +90,6 @@
   </div>
 
   {% include 'comments/_comment.html' %}
+
 </div>
 {% endblock %}

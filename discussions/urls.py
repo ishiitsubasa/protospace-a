@@ -1,9 +1,9 @@
 from django.urls import path
 from . import views
-from views import DiscussionIndexView,DiscussionCreateView
 
-app_name='discussions'
+app_name = 'discussions'
 
 urlpatterns = [
-    path('discussions/create',DiscussionCreateView.as_view(),name='create'),
+    path('posts/<int:post_pk>/discussions/', views.DiscussionIndexView.as_view(), name='index'),
+    path('posts/<int:post_pk>/discussions/create', views.DiscussionCreateView.as_view(), name='create'),
 ]
