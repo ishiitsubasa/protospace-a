@@ -20,7 +20,7 @@
         <div class="topic-dropdown__panel">
           <div class="topic-dropdown__header">
             <span>議題一覧</span>
-            <a href="{% url 'discussions:create' post.pk %}" class="topic-dropdown__create">＋ 作成する</a>
+            <a href="{% url 'discussion:create' post.pk %}" class="topic-dropdown__create">＋ 作成する</a>
           </div>
           <div class="topic-dropdown__list" id="topic-list-{{ post.pk }}">
             <p class="topic-dropdown__loading">読み込み中...</p>

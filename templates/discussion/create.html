@@ -1,16 +1,11 @@
-{%extends "base.html"%}
-{%load static%}
-{%block content%}
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 
-
-<div class="contents=row">
+<div class="contents-row">
   <div class="container">
-    <form method="post"  enctype="multipart/form-data" class="form-wrapper">
-       {% csrf_token %}
-      {% include "discussion/_form.html" %}
-    </form>
+    {% include "discussion/forms.html" %}
   </div>
-
 </div>
-{%endblock content%}
 
+{% endblock %}
