@@ -47,6 +47,7 @@ class DiscussionCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+
      
      
      
