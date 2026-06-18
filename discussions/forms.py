@@ -7,6 +7,7 @@ class DiscussionForm(forms.ModelForm):
     fields=['title']
     widgets={
       'title':forms.TextInput(attrs={'maxlength':'100'})
+      
     }
     labels={
       'title':'議題タイトル'
