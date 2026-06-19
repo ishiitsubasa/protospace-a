@@ -86,21 +86,21 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 #//本番環境//
-# default_dburl = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
-# DATABASES = {
-#     "default": config("DATABASE_URL", default=default_dburl, cast=dburl),
-# }
-
+default_dburl = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'protospace',
-       'USER': 'postgres',
-       'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD'),
-       'HOST': 'localhost',
-       'PORT': '5432',
-   }
+    "default": config("DATABASE_URL", default=default_dburl, cast=dburl),
 }
+
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'protospace',
+#        'USER': 'postgres',
+#        'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD'),
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+# }
 
 
 # Password validation
