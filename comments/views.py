@@ -29,7 +29,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return response
 
     def form_invalid(self, form):
-        return redirect('Posts:detail', pk=self.kwargs['pk'])
+        return redirect('discussions:detail', pk=self.kwargs['pk'])
 
     def get_success_url(self):
-        return reverse('Posts:detail', kwargs={'pk': self.kwargs['pk']})
+        return reverse('discussions:detail', kwargs={'pk': self.kwargs['pk']})
