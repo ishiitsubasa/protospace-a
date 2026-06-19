@@ -1,11 +1,11 @@
 {% load static %}
-<div class="vote-section" id="pain-section"
+<div class="vote-toggle-box" id="pain-section"
      data-url="{% url 'Posts:pain_score' post.pk %}"
-     data-post-id="{{ post.pk }}">
+     data-post-id="{{ post.pk }}"
+     data-voted="{% if user_pain_score %}true{% else %}false{% endif %}">
 
-  <h3 class="vote-section__title">課題の実感スコア</h3>
-  <p class="vote-section__question">この課題、あなたも感じていますか？</p>
-  <p class="vote-section__note">投票は匿名で集計されます</p>
+  <p class="vote-input-box__label">課題の実感スコア</p>
+  <p class="vote-input-box__note">この課題、あなたも感じていますか？</p>
 
   {% if not user.is_authenticated %}
   <p class="vote-section__disabled">回答にはログインが必要です</p>
@@ -14,53 +14,62 @@
   <p class="vote-section__disabled">自分のアイデアには回答できません</p>
 
   {% else %}
-  <div class="pain-buttons" id="pain-buttons">
-    {% for i in "12345" %}
-    <button class="pain-btn {% if user_pain_score == forloop.counter %}selected{% endif %}" data-value="{{ forloop.counter }}">{{ forloop.counter }}</button>
-    {% endfor %}
-  </div>
-  <div class="pain-labels">
-    <span>全く感じない</span>
-    <span class="pain-selected-label" id="pain-selected-label"></span>
-    <span>強く感じている</span>
-  </div>
-  <button class="vote-submit-btn" id="pain-submit" {% if not user_pain_score %}disabled{% endif %}>回答する</button>
-  {% if user_pain_score %}<p class="vote-section__voted-msg" id="pain-voted-msg">回答済み（あなたのスコア: {{ user_pain_score }}）変更できます</p>{% endif %}
-  {% endif %}
 
-  <div class="pain-result" id="pain-result">
-    {% if pain_summary.total > 0 %}
-    <div class="pain-metrics">
-      <div class="pain-metric">
-        <span class="pain-metric__value">{{ pain_summary.avg }}</span>
-        <span class="pain-metric__label">平均スコア</span>
-      </div>
-      <div class="pain-metric">
-        <span class="pain-metric__value">{{ pain_summary.high_rate }}%</span>
-        <span class="pain-metric__label">スコア4以上の割合</span>
-      </div>
-      <div class="pain-metric">
-        <span class="pain-metric__value">{{ pain_summary.total }}</span>
-        <span class="pain-metric__label">回答数</span>
-      </div>
-    </div>
-
-    {% if pain_summary.dept_breakdown %}
-    <div class="dept-bar-list">
-      {% for dept, avg in pain_summary.dept_breakdown.items %}
-      <div class="dept-bar-row">
-        <span class="dept-bar-row__name">{{ dept }}</span>
-        <div class="dept-bar-wrap">
-          <div class="dept-bar-fill" style="width:{% widthratio avg 5 100 %}%"></div>
-        </div>
-        <span class="dept-bar-row__val">{{ avg }}</span>
-      </div>
+  <!-- 投票フォーム（状態①④） -->
+  <div class="vote-toggle__form" id="pain-form-view">
+    <div class="pain-buttons" id="pain-buttons">
+      {% for i in "12345" %}
+      <button class="pain-btn {% if user_pain_score == forloop.counter %}selected{% endif %}"
+              data-value="{{ forloop.counter }}">{{ forloop.counter }}</button>
       {% endfor %}
     </div>
-    {% endif %}
-
-    {% else %}
-    <p class="vote-section__empty">まだ回答がありません</p>
-    {% endif %}
+    <div class="pain-labels">
+      <span>全く感じない</span>
+      <span class="pain-selected-label" id="pain-selected-label"></span>
+      <span>強く感じている</span>
+    </div>
+    <div class="vote-form-footer">
+      <button class="vote-submit-btn" id="pain-submit" {% if not user_pain_score %}disabled{% endif %}>回答する</button>
+    </div>
   </div>
+
+  <!-- 集計結果（状態②③） -->
+  <div class="vote-toggle__result" id="pain-result-view">
+    <button class="back-to-form-btn" id="pain-back-btn">← 投票フォームに戻る</button>
+    <div id="pain-result">
+      {% if pain_summary.total > 0 %}
+      <div class="pain-metrics">
+        <div class="pain-metric">
+          <span class="pain-metric__value">{{ pain_summary.avg }}</span>
+          <span class="pain-metric__label">平均スコア</span>
+        </div>
+        <div class="pain-metric">
+          <span class="pain-metric__value">{{ pain_summary.high_rate }}%</span>
+          <span class="pain-metric__label">スコア4以上の割合</span>
+        </div>
+        <div class="pain-metric">
+          <span class="pain-metric__value">{{ pain_summary.total }}</span>
+          <span class="pain-metric__label">回答数</span>
+        </div>
+      </div>
+      {% if pain_summary.dept_breakdown %}
+      <div class="dept-bar-list">
+        {% for dept, avg in pain_summary.dept_breakdown.items %}
+        <div class="dept-bar-row">
+          <span class="dept-bar-row__name">{{ dept }}</span>
+          <div class="dept-bar-wrap">
+            <div class="dept-bar-fill" style="width:{% widthratio avg 5 100 %}%"></div>
+          </div>
+          <span class="dept-bar-row__val">{{ avg }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% else %}
+      <p class="vote-section__empty">まだ回答がありません</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% endif %}
 </div>
