@@ -15,6 +15,8 @@ from posts.forms import PostForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+from discussions.models import Topic
+from comments.models import Comment
 
 class IndexView(ListView):
   model = Post
@@ -86,6 +88,17 @@ class PostDetailView(FormMixin, DetailView):
         pain_summary = _pain_summary(self.object)
         context['sympathy_summary'] = sympathy_summary
         context['pain_summary'] = pain_summary
+        context['top_topics'] = Topic.objects.filter(
+        post=self.object
+        ).annotate(
+        comment_count=Count('comments')
+        ).order_by('-comment_count')[:3]
+
+        for topic in top_topics:
+            topic.latest_comment = Comment.objects.filter(
+                topic=topic
+                ).order_by('-created_at').first()
+            context['top_topics'] = top_topics
         if self.request.user.is_authenticated:
             sv = SympathyVote.objects.filter(post=self.object, user=self.request.user).first()
             context['user_sympathy_vote'] = sv.vote_type if sv else None

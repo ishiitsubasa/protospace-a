@@ -1362,6 +1362,7 @@ footer p {
   width: 280px;     /* 右カラム: 固定幅 */
   flex-shrink: 0;
 }
+
 /* ===== 議題ドロップダウン ===== */
 .topic-dropdown {
   position: relative;

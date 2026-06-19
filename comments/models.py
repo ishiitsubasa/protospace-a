@@ -1,6 +1,6 @@
+# comments/models.py
 from django.db import models
 from django.conf import settings
-
 
 class Comment(models.Model):
     class Meta:
@@ -8,6 +8,7 @@ class Comment(models.Model):
 
     user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     post       = models.ForeignKey('posts.Post', on_delete=models.CASCADE, null=False)
+    topic      = models.ForeignKey('discussions.Topic', on_delete=models.CASCADE, related_name='comments', null=True, blank=True)  # 追加
     text       = models.TextField(null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -15,7 +16,7 @@ class Comment(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.user != self.post.user:
-            from notifications.models import Notification  # 循環import防止のため関数内でimport
+            from notifications.models import Notification
             Notification.objects.create(
                 user=self.post.user,
                 comment=self

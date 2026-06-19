@@ -80,8 +80,31 @@
 
   <!-- マトリクス（投稿者・管理職のみ） -->
   {% include 'posts/_matrix.html' %}
+  <!-- 盛り上がっている議題 TOP3 -->
+{% if top_topics %}
+<div class="detail__stats">
+  <h3 class="detail__stats-title">盛り上がっている議題 TOP3</h3>
+  {% for topic in top_topics %}
+  <a href="{% url 'discussions:detail' topic.pk %}" class="topic-rank-item">
+    <div style="flex:1">
+      <div style="display:flex;justify-content:space-between">
+        <span>{{ topic.title }}</span>
+        <span style="color:#57C3E9;font-weight:bold">{{ topic.comment_count }}件</span>
+      </div>
+      {% if topic.latest_comment %}
+      <p style="font-size:12px;color:#aaa;margin-top:4px">
+        {{ topic.latest_comment.user.nickname }}:
+        {{ topic.latest_comment.text|truncatechars:20 }}
+      </p>
+      {% endif %}
+    </div>
+  </a>
+  {% empty %}
+  <p style="color:#aaa;font-size:13px">まだ議題はありません。</p>
+  {% endfor %}
+</div>
+{% endif %}
 
-  {% include 'comments/_comment.html' %}
 
 </div>
 {% endblock %}
