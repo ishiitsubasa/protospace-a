@@ -76,7 +76,6 @@ class PostDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context=super().get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(post=self.object).select_related('user')
         context['form'] = self.get_form()
         context['like_count'] = self.object.likes.count()
@@ -88,17 +87,20 @@ class PostDetailView(FormMixin, DetailView):
         pain_summary = _pain_summary(self.object)
         context['sympathy_summary'] = sympathy_summary
         context['pain_summary'] = pain_summary
-        context['top_topics'] = Topic.objects.filter(
-        post=self.object
+
+        top_topics = Topic.objects.filter(
+            post=self.object
         ).annotate(
-        comment_count=Count('comments')
+            comment_count=Count('comments')
         ).order_by('-comment_count')[:3]
 
         for topic in top_topics:
             topic.latest_comment = Comment.objects.filter(
                 topic=topic
-                ).order_by('-created_at').first()
-            context['top_topics'] = top_topics
+            ).order_by('-created_at').first()
+
+        context['top_topics'] = top_topics
+
         if self.request.user.is_authenticated:
             sv = SympathyVote.objects.filter(post=self.object, user=self.request.user).first()
             context['user_sympathy_vote'] = sv.vote_type if sv else None
@@ -114,6 +116,7 @@ class PostDetailView(FormMixin, DetailView):
             context['user_pain_score'] = None
             context['matrix'] = None
         return context
+    
 
 class  PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
   model=Post

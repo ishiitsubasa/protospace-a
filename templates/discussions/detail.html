@@ -1,57 +1,68 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="detail-container">
+<div class="discussion-layout">
 
-  {# 議題タイトル #}
-  <h2 class="detail__title">議題: {{ discussions.post.title }}</h2>
+  <div class="discussion-layout__main">
 
-  {# 投稿者・日時 #}
-  <p class="detail__author">
-    投稿者: {{ post.user.nickname }} · {{ post.created_at|date:"Y年m月d日 H:i" }}
-  </p>
+    {# 議題ヘッダーカード #}
+    <div class="discussion-info-card">
+      <h2 class="discussion-info-card__title">議題: {{ discussions.title }}</h2>
+      <table class="discussion-info-table">
+        <tr>
+          <th>投稿者</th>
+          <td>{{ post.user.nickname }}</td>
+        </tr>
+        <tr>
+          <th>投稿日時</th>
+          <td>{{ post.created_at|date:"Y年m月d日 H:i" }}</td>
+        </tr>
+      </table>
+      <div class="detail__actions" style="justify-content:flex-start;margin-bottom:0">
+        <a href="{% url 'discussions:create' post.id %}" class="update-btn">＋ 議題を新規作成する</a>
+      </div>
+    </div>
 
-  {# 議題を新規作成 #}
-  <div class="detail__actions">
-    <a href="{% url 'discussions:create' post.id %}" class="update-btn">+ 議題を新規作成する</a>
-  </div>
+    {# 投稿詳細カード #}
+    <div class="discussion-post-card">
+      <h3 class="discussion-post-card__title">
+        <a href="{% url 'Posts:detail' post.id %}">{{ post.name }}</a>
+      </h3>
+      <p class="discussion-post-card__author">
+        by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a>
+      </p>
 
-  <div class="detail-container">
+      {% if user == post.user %}
+      <div class="detail__actions" style="justify-content:flex-start;margin:8px 0 12px">
+        <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
+        <form action="{% url 'Posts:delete' post.id %}" method="post" style="display:inline">
+          {% csrf_token %}
+          <input type="submit" class="delete-btn" value="削除する">
+        </form>
+      </div>
+      {% endif %}
 
-  <!-- 行1: タイトル（左）＋ハート（右） -->
-  <div class="detail__top-bar">
-    <div>
-      <h2 class="detail__title">{{ post.name }}</h2>
-      <p class="detail__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></p>
+      {% if post.image %}
+      <img class="detail__image--full" src="{{ post.image.url }}" alt="{{ post.name }}">
+      {% endif %}
+
+      <table class="discussion-info-table" style="margin-top:8px">
+        <tr>
+          <th>解決したい課題</th>
+          <td>{{ post.catchphrase }}</td>
+        </tr>
+        <tr>
+          <th>コンセプト</th>
+          <td>{{ post.concept }}</td>
+        </tr>
+      </table>
     </div>
 
   </div>
 
-  {% if user == post.user %}
-  <div class="detail__actions">
-    <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
-    <form action="{% url 'Posts:delete' post.id %}" method="post" style="display:inline">
-      {% csrf_token %}
-      <input type="submit" class="delete-btn" value="削除する">
-    </form>
+  <div class="discussion-layout__sidebar">
+    {% include 'comments/_comment.html' %}
   </div>
-  {% endif %}
-
-  <!-- 行2: 画像（左）＋テキスト・投票UI（右） -->
-  <div class="detail__media-row">
-    {% if post.image %}
-    <img class="detail__image" src="{{ post.image.url }}" alt="{{ post.name }}">
-    {% endif %}
-    <div class="detail__body">
-      <h3>解決したい課題</h3>
-      <p>{{ post.catchphrase }}</p>
-      <h3>コンセプト</h3>
-      <p>{{ post.concept }}</p>
-    </div>
-  </div>
-
-
-  {% include 'comments/_comment.html' %}
 
 </div>
 {% endblock %}

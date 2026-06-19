@@ -15,14 +15,11 @@ class DiscussionIndexView(LoginRequiredMixin, View):
         topics = Topic.objects.filter(post_id=post_pk).values('id', 'title')
         return JsonResponse({'topics': list(topics)})
 
-
 class DiscussionCreateView(LoginRequiredMixin, CreateView):
     """議題作成"""
     model = Topic
     form_class = DiscussionForm
-    success_url = reverse_lazy('Posts:detail')
-    
-    template_name = 'discussions/create.html'
+    template_name = 'discussion/create.html'
 
     def get_success_url(self):
         return reverse_lazy('Posts:detail', kwargs={'pk': self.kwargs['post_pk']})
@@ -33,16 +30,17 @@ class DiscussionCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-
 class DiscussionDetailView(DetailView):
     model = Topic
     template_name = 'discussions/detail.html'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['discussions'] = self.object        # Topic
-        ctx['post'] = self.object.post          # Post（include先が使う）
-        ctx['comments'] = Comment.objects.filter(post_id=self.object.pk)
+        ctx['discussions'] = self.object
+        ctx['post'] = self.object.post
+        ctx['comments'] = Comment.objects.filter(
+            topic=self.object
+        ).select_related('user').order_by('created_at')
         ctx['form'] = CommentForm()
         return ctx
      
