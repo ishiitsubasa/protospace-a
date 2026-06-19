@@ -178,12 +178,14 @@ a.post:hover {
   overflow: hidden;
 }
 
-.card__thumbnail {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background-color: #7BBFBF;
-  display: block;
+.card__thumbnail { 
+width: 100%; 
+aspect-ratio: 4 / 4; 
+object-fit: contain; 
+object-position: center; 
+background: #949593;; 
+display: block; 
+flex-shrink: 0; 
 }
 
 .card__body {
@@ -230,7 +232,7 @@ a.post:hover {
 }
 
 .detail__body p {
-  font-size: 13px;
+  font-size: 18px;
   color: #555;
   margin-bottom: 16px;
 }
@@ -538,14 +540,14 @@ footer p {
   display: block;
 }
 
-.detail__image {
-  width: 40%;
-  height: 80%;
-  object-fit: contain;
-  flex-shrink: 0;
-  border-radius: 4px;
-  margin: 0;
-  background-color: #ffffff; /* 余白部分の背景色 */
+.detail__image { 
+width: 40%; aspect-ratio: 4 / 4; 
+object-fit: contain; 
+object-position: center; 
+flex-shrink: 0; 
+border-radius: 4px; 
+margin: 0;
+background-color: #949593; 
 }
 
 .detail__media-row .detail__body {
