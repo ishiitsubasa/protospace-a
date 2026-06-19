@@ -105,17 +105,18 @@ class PostDetailView(FormMixin, DetailView):
         context['sympathy_summary'] = sympathy_summary
         context['pain_summary'] = pain_summary
 
-        context['top_topics'] = Topic.objects.filter(
-        post=self.object
-        ).annotate(
-        comment_count=Count('comments')
-        ).order_by('-comment_count')[:3]
+        top_topics = Topic.objects.filter(
+    post=self.object
+).annotate(
+    comment_count=Count('comments')
+).order_by('-comment_count')[:3]
+
         for topic in top_topics:
             topic.latest_comment = Comment.objects.filter(
-                topic=topic
-                ).order_by('-created_at').first()
-            context['top_topics'] = top_topics
+        topic=topic
+    ).order_by('-created_at').first()
 
+        context['top_topics'] = top_topics
         if self.request.user.is_authenticated:
             sv = SympathyVote.objects.filter(post=self.object, user=self.request.user).first()
             context['user_sympathy_vote'] = sv.vote_type if sv else None
