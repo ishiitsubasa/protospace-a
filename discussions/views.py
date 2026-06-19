@@ -7,6 +7,7 @@ from .models import Topic
 from .forms import DiscussionForm
 from posts.models import Post
 from comments.forms import CommentForm
+from comments.models import Comment
 
 class DiscussionIndexView(LoginRequiredMixin, View):
     """議題一覧（JSON）"""
@@ -41,7 +42,7 @@ class DiscussionDetailView(DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['discussions'] = self.object        # Topic
         ctx['post'] = self.object.post          # Post（include先が使う）
-        ctx['comments'] = ...
+        ctx['comments'] = Comment.objects.filter(discussion_id=self.object.pk)
         ctx['form'] = CommentForm()
         return ctx
      
