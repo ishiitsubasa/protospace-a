@@ -3,26 +3,28 @@
 {% block content %}
 <div class="detail-container">
 
-  <!-- 行1: タイトル（左）＋ハート（右） -->
+  <!-- 上部: タイトル（左）＋議題プルダウン＋ハート（右） -->
   <div class="detail__top-bar">
     <div>
       <h2 class="detail__title">{{ post.name }}</h2>
       <p class="detail__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></p>
     </div>
-    <div class="like-section">
-      {% if user.is_authenticated and user != post.user %}
-      <button class="like-btn like-btn--large {% if user_liked %}liked{% endif %}"
-              data-post-id="{{ post.pk }}"
-              data-url="{% url 'Posts:like' post.pk %}">
-        <span class="like-icon">&#9829;</span>
-        <span class="like-count">{{ like_count }}</span>
-      </button>
-      {% else %}
-      <div class="like-display like-display--large">
-        <span class="like-icon">&#9829;</span>
-        <span class="like-count">{{ like_count }}</span>
+    <div class="detail__top-right">
+      <div class="like-section">
+        {% if user.is_authenticated and user != post.user %}
+        <button class="like-btn like-btn--large {% if user_liked %}liked{% endif %}"
+                data-post-id="{{ post.pk }}"
+                data-url="{% url 'Posts:like' post.pk %}">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ like_count }}</span>
+        </button>
+        {% else %}
+        <div class="like-display like-display--large">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ like_count }}</span>
+        </div>
+        {% endif %}
       </div>
-      {% endif %}
     </div>
   </div>
 
@@ -36,28 +38,51 @@
   </div>
   {% endif %}
 
-  <!-- 行2: 画像（左）＋投票UI（右） -->
-  <div class="detail__media-row">
-    {% if post.image %}
-    <img class="detail__image" src="{{ post.image.url }}" alt="{{ post.name }}">
-    {% endif %}
-    <div class="detail__vote-col">
+  <!-- メイン: 左カラム（画像＋テキスト）＋右カラム（投票＋コメント） -->
+  <div class="detail__main-row">
+
+    <!-- 左カラム -->
+    <div class="detail__left-col">
+      {% if post.image %}
+      <img class="detail__image" src="{{ post.image.url }}" alt="{{ post.name }}">
+      {% endif %}
+      <div class="detail__body">
+        <h3>解決したい課題</h3>
+        <p>{{ post.catchphrase }}</p>
+        <h3>コンセプト</h3>
+        <p>{{ post.concept }}</p>
+      </div>
+    </div>
+
+    <!-- 右カラム -->
+    <div class="detail__right-col">
       {% include 'posts/_pain_score.html' %}
       {% include 'posts/_sympathy_vote.html' %}
+
+      <!-- 議題プルダウン -->
+      {% if topics %}
+      <form method="get" class="topic-select-form">
+        <label class="topic-select-label"></label>
+        <select name="topic" class="topic-select" onchange="this.form.submit()">
+          {% for t in topics %}
+          <option value="{{ t.pk }}" {% if t == top_topic %}selected{% endif %}>
+            {{ t.title }}（{{ t.comment_count }}件）
+          </option>
+          {% endfor %}
+        </select>
+      </form>
+      {% endif %}
+
+      <!-- コメント欄（クリックでディスカッションページへ） -->
+      <a href="{% url 'Posts:discussion' post.pk %}{% if top_topic %}?topic={{ top_topic.pk }}{% endif %}"
+         class="comment-preview-link">
+        {% include 'comments/_comment.html' %}
+      </a>
     </div>
+
   </div>
 
-  <!-- 行3: テキスト（画像の下） -->
-  <div class="detail__body">
-    <h3>解決したい課題</h3>
-    <p>{{ post.catchphrase }}</p>
-    <h3>コンセプト</h3>
-    <p>{{ post.concept }}</p>
-  </div>
-
-  <!-- マトリクス（投稿者・管理職のみ） -->
   {% include 'posts/_matrix.html' %}
 
-  {% include 'comments/_comment.html' %}
 </div>
 {% endblock %}
