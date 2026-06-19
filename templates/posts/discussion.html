@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="discussion-container">
+
+  <!-- 左カラム: 投稿情報 -->
+  <div class="discussion__left">
+    <a href="{% url 'Posts:detail' post.pk %}" class="back-link">← 詳細ページに戻る</a>
+    <h2 class="detail__title">{{ post.name }}</h2>
+    <p class="detail__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></p>
+    {% if post.image %}
+    <img class="discussion__image" src="{{ post.image.url }}" alt="{{ post.name }}">
+    {% endif %}
+    <div class="discussion__info">
+      <h3>解決したい課題</h3>
+      <p>{{ post.catchphrase }}</p>
+      <h3>コンセプト</h3>
+      <p>{{ post.concept }}</p>
+    </div>
+  </div>
+
+  <!-- 右カラム: 議題タブ＋コメント -->
+  <div class="discussion__right">
+
+    <!-- 議題タブ -->
+    <div class="topic-tabs" id="topic-tabs"
+         data-create-url="{% url 'Posts:create_topic' post.pk %}"
+         data-comment-url-base="/posts/{{ post.pk }}/topics/">
+      {% for topic in topics %}
+      <button class="topic-tab {% if topic == selected_topic %}topic-tab--active{% endif %}"
+              data-topic-id="{{ topic.pk }}"
+              data-comment-url="{% url 'Posts:create_discussion_comment' post.pk topic.pk %}">
+        {{ topic.title }}
+        <span class="topic-tab__count">{{ topic.comment_count }}</span>
+      </button>
+      {% endfor %}
+      <button class="topic-tab topic-tab--new" id="new-topic-btn">＋</button>
+    </div>
+
+    <!-- 新規議題フォーム（デフォルト非表示） -->
+    <div class="new-topic-form" id="new-topic-form" style="display:none">
+      <input type="text" id="new-topic-input" class="new-topic-form__input" placeholder="議題タイトル（100文字以内）" maxlength="100">
+      <div class="new-topic-form__actions">
+        <button class="new-topic-form__submit" id="new-topic-submit">作成する</button>
+        <button class="new-topic-form__cancel" id="new-topic-cancel">キャンセル</button>
+      </div>
+    </div>
+
+    <!-- コメントエリア -->
+    <div class="comment-area" id="comment-area">
+      {% if selected_topic %}
+      <div class="comment-list" id="comment-list">
+        {% if comments %}
+          {% for comment in comments %}
+          <div class="comment-item">
+            <div class="comment-item__meta">
+              <a href="{% url 'users:mypage' comment.user.pk %}" class="comment-item__user">{{ comment.user.nickname }}</a>
+              <span class="comment-item__date">{{ comment.created_at|date:"Y/m/d H:i" }}</span>
+            </div>
+            <p class="comment-item__text">{{ comment.text }}</p>
+          </div>
+          {% endfor %}
+        {% else %}
+        <p class="comment-area__empty" id="comment-empty">まだコメントがありません</p>
+        {% endif %}
+      </div>
+
+      {% if user.is_authenticated %}
+      <div class="comment-form" id="comment-form"
+           data-url="{% url 'Posts:create_discussion_comment' post.pk selected_topic.pk %}">
+        <textarea class="comment-form__input" id="comment-input" placeholder="コメントを入力..." rows="3"></textarea>
+        <button class="comment-form__submit" id="comment-submit">送信する</button>
+      </div>
+      {% endif %}
+
+      {% else %}
+      <div class="comment-area__no-topic">
+        <p>「＋」ボタンから議題を作成してディスカッションを始めましょう</p>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/discussion.js' %}"></script>
+{% endblock %}
