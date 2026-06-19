@@ -1,11 +1,18 @@
-from django.urls import reverse_lazy
-from django.views.generic import CreateView,DetailView
-from .models import Topic
 from django.shortcuts import get_object_or_404
-from posts.models import Post
-from .forms import DiscussionForm
+from django.urls import reverse_lazy
+from django.http import JsonResponse
+from django.views.generic import View, CreateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Topic
+from .forms import DiscussionForm
+from posts.models import Post
 from comments.forms import CommentForm
+
+class DiscussionIndexView(LoginRequiredMixin, View):
+    """議題一覧（JSON）"""
+    def get(self, request, post_pk):
+        topics = Topic.objects.filter(post_id=post_pk).values('id', 'title')
+        return JsonResponse({'topics': list(topics)})
 
 
 class DiscussionCreateView(LoginRequiredMixin, CreateView):
@@ -14,6 +21,11 @@ class DiscussionCreateView(LoginRequiredMixin, CreateView):
     form_class = DiscussionForm
     success_url = reverse_lazy('Posts:detail')
     
+    template_name = 'discussions/create.html'
+
+    def get_success_url(self):
+        return reverse_lazy('Posts:detail', kwargs={'pk': self.kwargs['post_pk']})
+
     def form_valid(self, form):
         post = get_object_or_404(Post, pk=self.kwargs['post_pk'])
         form.instance.post = post
