@@ -77,6 +77,7 @@ class PostDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context=super().get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(post=self.object).select_related('user')
         context['form'] = self.get_form()
         context['like_count'] = self.object.likes.count()
