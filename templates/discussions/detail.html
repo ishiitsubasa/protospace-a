@@ -2,7 +2,6 @@
 <div class="container comment-container">
   <h3>議論</h3>
   <div class="comment-layout">
-
     {# 左: コメント一覧 #}
     <div class="comments">
       <h4>＜議論 履歴一覧＞</h4>
@@ -15,11 +14,14 @@
       <p style="color:#aaa">まだコメントはありません。</p>
       {% endfor %}
     </div>
-
     {# 右: 投稿フォーム #}
     <div class="comment-form">
       {% if user.is_authenticated %}
+      {% if discussions %}
+      <form method="post" action="{% url 'comments:create_for_topic' pk=post.id topic_pk=discussions.pk %}">
+      {% else %}
       <form method="post" action="{% url 'comments:create' pk=post.id %}">
+      {% endif %}
         {% csrf_token %}
         {{ form.text }}
         <input type="submit" value="送信する">
@@ -28,4 +30,5 @@
       <p>※※※ コメントの投稿には新規登録/ログインが必要です ※※※</p>
       {% endif %}
     </div>
+  </div>
 </div>

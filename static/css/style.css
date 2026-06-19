@@ -1343,64 +1343,136 @@ background-color: #949593;
   color: #555;
 }
 
-/* ===== 投票切替トグル ===== */
-.vote-toggle-box {
-  margin: 12px 0 20px;
-  padding: 14px 16px;
-  border: 1px solid #e8e8e8;
-  border-radius: 8px;
-  background: #fafafa;
-  text-align: left;
+
+/* ===== Comment 2カラムレイアウト ===== */
+.comment-container {
+  max-width: 860px;  /* 横並びなので少し広げる */
 }
 
-.vote-toggle__form,
-.vote-toggle__result {
-  transition: opacity 0.3s;
+.comment-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
 }
 
-.vote-form-footer {
+.comment-layout .comments {
+  flex: 1;          /* 左カラム: 伸縮 */
+  margin-top: 0;
+}
+
+.comment-form {
+  width: 280px;     /* 右カラム: 固定幅 */
+  flex-shrink: 0;
+}
+
+/* ===== 議題ドロップダウン ===== */
+.topic-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.topic-dropdown__btn {
+  padding: 6px 14px 6px 16px;
+  border: 1px solid #87CEFA;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #87CEFA;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 6px;
+  transition: all 0.2s;
 }
 
-.voted-badge {
-  display: inline-block;
-  padding: 3px 10px;
-  background: #e0e0e0;
-  color: #555;
-  border-radius: 12px;
-  font-size: 11px;
+.topic-dropdown__btn:hover {
+  background: #57C3E9;
+  color: #fff;
+  border-color: #57C3E9;
+}
+
+.topic-dropdown__btn:hover .topic-dropdown__arrow {
+  border-top-color: #fff;
+}
+
+.topic-dropdown__arrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #87CEFA;
+  transition: border-top-color 0.2s;
+}
+
+.topic-dropdown__panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 280px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 100;
+}
+
+.topic-dropdown:hover .topic-dropdown__panel {
+  display: block;
+}
+
+.topic-dropdown__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.topic-dropdown__header span {
+  font-size: 13px;
   font-weight: bold;
+  color: #333;
 }
 
-.back-to-form-btn {
-  display: inline-block;
-  margin-bottom: 12px;
-  font-size: 12px;
-  color: #57C3E9;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-family: inherit;
+.topic-dropdown__create {
+  font-size: 11px;
+  color: #87CEFA;
+  border: 1px solid #87CEFA;
+  border-radius: 3px;
+  padding: 3px 10px;
+  transition: all 0.2s;
 }
 
-.back-to-form-btn:hover {
-  opacity: 0.7;
+.topic-dropdown__create:hover {
+  background: #57C3E9;
+  color: #fff;
+  border-color: #57C3E9;
 }
 
-/* 非活性ボタンのスタイル（状態④） */
-.vote-toggle__form button:disabled.sympathy-btn,
-.vote-toggle__form button:disabled.pain-btn {
-  opacity: 0.45;
-  cursor: not-allowed;
+.topic-dropdown__list {
+  max-height: 220px;
+  overflow-y: auto;
 }
 
-.vote-toggle__form button:disabled.vote-submit-btn {
-  opacity: 0.45;
-  cursor: not-allowed;
+.topic-dropdown__item {
+  padding: 9px 14px;
+  font-size: 13px;
+  color: #333;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.topic-dropdown__item:last-child {
+  border-bottom: none;
+}
+
+.topic-dropdown__empty,
+.topic-dropdown__loading {
+  padding: 16px 14px;
+  font-size: 13px;
+  color: #bbb;
+  text-align: center;
 }
 .mypage__top-row {
   display: flex;

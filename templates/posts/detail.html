@@ -4,26 +4,48 @@
 <div class="detail-container"
      {% if user.is_authenticated and user == post.user %}data-mark-comments-read-url="{% url 'notifications:mark_comments_read' %}"{% endif %}>
 
-  <!-- 行1: タイトル（左）＋ハート（右） -->
+  <!-- 行1: タイトル（左）＋議題ドロップダウン＋ハート（右） -->
   <div class="detail__top-bar">
     <div>
       <h2 class="detail__title">{{ post.name }}</h2>
       <p class="detail__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></p>
     </div>
-    <div class="like-section">
-      {% if user.is_authenticated and user != post.user %}
-      <button class="like-btn like-btn--large {% if user_liked %}liked{% endif %}"
-              data-post-id="{{ post.pk }}"
-              data-url="{% url 'Posts:like' post.pk %}">
-        <span class="like-icon">&#9829;</span>
-        <span class="like-count">{{ like_count }}</span>
-      </button>
-      {% else %}
-      <div class="like-display like-display--large">
-        <span class="like-icon">&#9829;</span>
-        <span class="like-count">{{ like_count }}</span>
+    <div style="display: flex; align-items: center; gap: 16px;">
+
+      <!-- 議題ドロップダウン -->
+      <div class="topic-dropdown" data-post-id="{{ post.pk }}">
+        <button class="topic-dropdown__btn">
+          議題一覧
+          <span class="topic-dropdown__arrow"></span>
+        </button>
+        <div class="topic-dropdown__panel">
+          <div class="topic-dropdown__header">
+            <span>議題一覧</span>
+            <a href="{% url 'discussions:create' post.pk %}" class="topic-dropdown__create">＋ 作成する</a>
+          </div>
+          <a href="{%url 'discussions:detail' post.pk%}" class="topic-dropdown__list" id="topic-list-{{ post.pk }}"></a>
+            <p class="topic-dropdown__loading">読み込み中...</p>
+          
+        </div>
       </div>
-      {% endif %}
+
+      <!-- いいね -->
+      <div class="like-section">
+        {% if user.is_authenticated and user != post.user %}
+        <button class="like-btn like-btn--large {% if user_liked %}liked{% endif %}"
+          data-post-id="{{ post.pk }}"
+          data-url="{% url 'Posts:like' post.pk %}">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ like_count }}</span>
+        </button>
+        {% else %}
+        <div class="like-display like-display--large">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ like_count }}</span>
+        </div>
+        {% endif %}
+      </div>
+
     </div>
   </div>
 
@@ -56,9 +78,34 @@
     <p>{{ post.concept }}</p>
   </div>
 
+
   <!-- マトリクス（投稿者・管理職のみ） -->
   {% include 'posts/_matrix.html' %}
+  <!-- 盛り上がっている議題 TOP3 -->
+{% if top_topics %}
+<div class="detail__stats">
+  <h3 class="detail__stats-title">盛り上がっている議題 TOP3</h3>
+  {% for topic in top_topics %}
+  <a href="{% url 'discussions:detail' topic.pk %}" class="topic-rank-item">
+    <div style="flex:1">
+      <div style="display:flex;justify-content:space-between">
+        <span>{{ topic.title }}</span>
+        <span style="color:#57C3E9;font-weight:bold">{{ topic.comment_count }}件</span>
+      </div>
+      {% if topic.latest_comment %}
+      <p style="font-size:12px;color:#aaa;margin-top:4px">
+        {{ topic.latest_comment.user.nickname }}:
+        {{ topic.latest_comment.text|truncatechars:20 }}
+      </p>
+      {% endif %}
+    </div>
+  </a>
+  {% empty %}
+  <p style="color:#aaa;font-size:13px">まだ議題はありません。</p>
+  {% endfor %}
+</div>
+{% endif %}
 
-  {% include 'comments/_comment.html' %}
+
 </div>
 {% endblock %}
