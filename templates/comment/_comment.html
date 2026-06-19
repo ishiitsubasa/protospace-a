@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="container">
+  <h3>コメント</h3>
+  {% if user.is_authenticated %}
+  <form method="post" action="{% url 'comments:create' pk=post.id %}">
+    {% csrf_token %}
+    {{ form.text }}
+    <input type="submit" value="送信する">
+  </form>
+  {% else %}
+    <p>※※※ コメントの投稿には新規登録/ログインが必要です ※※※</p>
+  {% endif %}
+
+  <div class="comments">
+    <h4>＜コメント一覧＞</h4>
+    {% for comment in comments %}
+    <p>
+      <a href="{% url 'users:mypage' comment.user.pk %}">{{ comment.user.nickname }}</a>
+      {{ comment.text }}
+    </p>
+    {% endfor %}
+  </div>
+</div>
