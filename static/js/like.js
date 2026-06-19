@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.like-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
       var url = btn.dataset.url;
       var csrfToken = document.cookie.match(/csrftoken=([^;]+)/);
       if (!csrfToken) return;
@@ -24,3 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
+// function handleCardClick(event, url) {
+//   // aタグやbuttonがクリックされた場合は遷移しない
+//   if (event.target.closest('a, button')) return;
+//   window.location = url;
+// }
