@@ -15,7 +15,7 @@
   <div class="comments">
     <h4>＜コメント一覧＞</h4>
     {% for comment in comments %}
-    <p>
+    <p class="comment-observe" data-comment-id="{{ comment.pk }}">
       <a href="{% url 'users:mypage' comment.user.pk %}">{{ comment.user.nickname }}</a>
       {{ comment.text }}
     </p>

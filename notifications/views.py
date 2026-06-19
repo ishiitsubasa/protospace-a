@@ -38,7 +38,26 @@ def mark_one_read(request, notification_id):
 
 
 @login_required
-def notification_list(request):                          # ← 追加
+@require_POST
+def mark_comments_read(request):
+    import json
+    try:
+        comment_ids = json.loads(request.body).get('comment_ids', [])
+    except (ValueError, AttributeError):
+        return JsonResponse({'error': 'invalid'}, status=400)
+    if not comment_ids:
+        return JsonResponse({'marked': 0})
+    Notification.objects.filter(
+        user=request.user,
+        comment_id__in=comment_ids,
+        read_at__isnull=True,
+    ).update(read_at=timezone.now())
+    remaining = Notification.objects.filter(user=request.user, read_at__isnull=True).count()
+    return JsonResponse({'remaining': remaining})
+
+
+@login_required
+def notification_list(request):
     """通知一覧ページ：未読を既読にしてから表示"""
     notifications = Notification.objects.filter(
         user=request.user,
