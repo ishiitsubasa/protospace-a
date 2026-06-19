@@ -178,12 +178,14 @@ a.post:hover {
   overflow: hidden;
 }
 
-.card__thumbnail {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background-color: #7BBFBF;
-  display: block;
+.card__thumbnail { 
+  width: 100%; 
+  aspect-ratio: 4 / 3; 
+  object-fit: contain; 
+  object-position: center; 
+  background-color:#949593; 
+  display: block; 
+  flex-shrink: 0; 
 }
 
 .card__body {
@@ -216,6 +218,7 @@ a.post:hover {
   max-width: 1140px;
   margin: 20px auto;
   text-align: center;
+  padding-bottom: 120px;
 }
 
 .detail__body {
@@ -224,13 +227,13 @@ a.post:hover {
 }
 
 .detail__body h3 {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   margin-bottom: 6px;
 }
 
 .detail__body p {
-  font-size: 13px;
+  font-size: 18px;
   color: #555;
   margin-bottom: 16px;
 }
@@ -246,7 +249,7 @@ a.post:hover {
 
 .detail__actions {
   margin-top: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 50px;
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -255,6 +258,7 @@ a.post:hover {
 .detail__title{
   display: flex;
   justify-content: center;
+  font-size: 32px;
 }
 
 
@@ -360,7 +364,7 @@ a.post:hover {
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   padding: 30px 40px;
-  margin: 30px auto 80px;
+  margin: 30px auto 120px;
   max-width: 560px;
 }
 
@@ -529,23 +533,16 @@ footer p {
   justify-content: center;
 }
 
-.detail__image--full {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
-  margin-bottom: 16px;
-  display: block;
-}
 
-.detail__image {
-  width: 40%;
-  height: 80%;
-  object-fit: contain;
-  flex-shrink: 0;
-  border-radius: 4px;
-  margin: 0;
-  background-color: #ffffff; /* 余白部分の背景色 */
+
+.detail__image { 
+width: 100%; aspect-ratio: 4 / 4; 
+object-fit: contain; 
+object-position: center; 
+flex-shrink: 0; 
+border-radius: 4px; 
+margin: 0;
+background-color: #949593; 
 }
 
 .detail__media-row .detail__body {
@@ -1399,4 +1396,413 @@ footer p {
 .vote-toggle__form button:disabled.vote-submit-btn {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+/* ===== ディスカッションページ ===== */
+.discussion-container {
+  display: flex;
+  gap: 32px;
+  max-width: 1140px;
+  margin: 20px auto;
+  padding: 0 20px;
+  align-items: flex-start;
+  min-height: calc(100vh - 120px);
+}
+
+.discussion__left {
+  flex: 0 0 38%;
+  text-align: left;
+  margin-bottom: 80px;
+}
+
+.discussion__left .detail__title {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 8px 0 4px;
+  justify-content: flex-start;
+}
+
+.discussion__left .detail__author {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.discussion__image {
+  width: 100%;
+  aspect-ratio: 4 / 4; 
+  object-fit: contain; 
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.discussion__info h3 {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.discussion__info p {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.discussion__right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ---- 議題タブ ---- */
+.topic-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  border-bottom: 2px solid #e8e8e8;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.topic-tab {
+  padding: 6px 14px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topic-tab:hover {
+  border-color: #57C3E9;
+  color: #57C3E9;
+}
+
+.topic-tab--active {
+  background: #57C3E9;
+  border-color: #57C3E9;
+  color: #fff;
+  font-weight: bold;
+}
+
+.topic-tab--active:hover {
+  color: #fff;
+}
+
+.topic-tab__count {
+  font-size: 11px;
+  background: rgba(0,0,0,0.12);
+  border-radius: 10px;
+  padding: 0 6px;
+}
+
+.topic-tab--new {
+  padding: 6px 12px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #f5f5f5;
+  border-style: dashed;
+}
+
+/* ---- 新規議題フォーム ---- */
+.new-topic-form {
+  background: #f9f9f9;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.new-topic-form__input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  margin-bottom: 8px;
+  outline: none;
+}
+
+.new-topic-form__input:focus {
+  border-color: #57C3E9;
+}
+
+.new-topic-form__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.new-topic-form__submit {
+  padding: 6px 16px;
+  background: #57C3E9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.new-topic-form__cancel {
+  padding: 6px 16px;
+  background: #fff;
+  color: #888;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ---- コメントエリア ---- */
+.comment-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.comment-area__no-topic {
+  text-align: center;
+  color: #888;
+  padding: 40px 0;
+  font-size: 14px;
+}
+
+.comment-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comment-area__empty {
+  color: #aaa;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.comment-item {
+  padding: 10px 14px;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.comment-item__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.comment-item__user {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-item__date {
+  font-size: 11px;
+  color: #aaa;
+}
+
+.comment-item__text {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.comment-form {
+  border-top: 1px solid #e8e8e8;
+  padding-top: 12px;
+}
+
+.comment-form__input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  margin-bottom: 8px;
+}
+
+.comment-form__input:focus {
+  border-color: #57C3E9;
+}
+
+.comment-form__submit {
+  padding: 7px 20px;
+  background: #57C3E9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.comment-form__submit:hover {
+  background: #3aadd4;
+}
+
+/* ---- 詳細ページのコメントプレビュー ---- */
+.comment-preview {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.comment-preview__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.comment-preview__title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.discussion-link {
+  font-size: 12px;
+  color: #57C3E9;
+}
+
+.comment-preview__empty {
+  font-size: 13px;
+  color: #aaa;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.comment-preview__cta {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.comment-preview__cta p {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.cta-btn {
+  display: inline-block;
+  padding: 7px 20px;
+  background: #57C3E9;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.cta-btn:hover {
+  background: #3aadd4;
+  color: #fff;
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.back-link:hover {
+  color: #57C3E9;
+}
+
+/* ===== 詳細ページ 2カラム再構成 ===== */
+.detail__main-row {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.detail__left-col {
+  flex: 0 0 42%;
+}
+
+.detail__right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 議題プルダウン */
+.detail__top-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topic-select-form {
+  display: flex;
+  align-items: center;
+}
+
+.topic-select {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  max-width: 200px;
+  outline: none;
+}
+
+.topic-select:focus {
+  border-color: #57C3E9;
+}
+
+/* コメント欄クリック可能ラッパー */
+.comment-preview-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.comment-preview-link:hover .comment-preview {
+  border-color: #57C3E9;
+  transition: border-color 0.15s;
+}
+
+/* コメントプレビューを縦長に */
+.comment-preview {
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-preview .comment-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 320px;
 }
