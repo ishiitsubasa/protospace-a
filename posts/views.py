@@ -116,6 +116,7 @@ class PostDetailView(FormMixin, DetailView):
 
         context['top_topics'] = top_topics
 
+        context['top_topics'] = top_topics
         if self.request.user.is_authenticated:
             sv = SympathyVote.objects.filter(post=self.object, user=self.request.user).first()
             context['user_sympathy_vote'] = sv.vote_type if sv else None
