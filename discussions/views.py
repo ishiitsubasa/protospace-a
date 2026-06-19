@@ -47,6 +47,3 @@ class DiscussionDetailView(DetailView):
         return ctx
      
      
-     
-
-     
