@@ -19,7 +19,7 @@ class DiscussionCreateView(LoginRequiredMixin, CreateView):
     """議題作成"""
     model = Topic
     form_class = DiscussionForm
-    template_name = 'discussion/create.html'
+    template_name = 'discussions/create.html'
 
     def get_success_url(self):
         return reverse_lazy('Posts:detail', kwargs={'pk': self.kwargs['post_pk']})
