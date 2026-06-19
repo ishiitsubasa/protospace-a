@@ -19,6 +19,16 @@
     </tr>
   </table>
 
+  {% if user == profile_user %}
+  <div class="mypage__actions">
+    <a href="{% url 'users:update' profile_user.pk %}" class="update-btn">編集する</a>
+    <form action="{% url 'users:delete' profile_user.pk %}" method="post" style="display:inline">
+      {% csrf_token %}
+      <input type="submit" class="delete-btn" value="アカウントを削除する">
+    </form>
+  </div>
+  {% endif %}
+
   <h2 class="mypage__title">{{ profile_user.nickname }}さんのプロトタイプ</h2>
   {% include "posts/_post_list.html" %}
 </div>
