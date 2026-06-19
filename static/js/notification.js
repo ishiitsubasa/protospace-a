@@ -38,4 +38,42 @@
 
   fetchCount();
   setInterval(fetchCount, POLL_INTERVAL);
+
+  // 詳細ページ: 画面に映ったコメントを既読にする
+  const container = document.querySelector('[data-mark-comments-read-url]');
+  if (container) {
+    const markUrl = container.dataset.markCommentsReadUrl;
+    const pending = new Set();
+    let timer = null;
+
+    function flush() {
+      if (pending.size === 0) return;
+      const ids = Array.from(pending);
+      pending.clear();
+      fetch(markUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrf() },
+        body: JSON.stringify({ comment_ids: ids }),
+      })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => { if (data) updateBadge(data.remaining); })
+        .catch(() => {});
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = parseInt(entry.target.dataset.commentId, 10);
+          if (id) pending.add(id);
+          observer.unobserve(entry.target);
+        }
+      });
+      clearTimeout(timer);
+      timer = setTimeout(flush, 800);
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.comment-observe[data-comment-id]').forEach(el => {
+      observer.observe(el);
+    });
+  }
 })();

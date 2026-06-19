@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="detail-container">
+<div class="detail-container"
+     {% if user.is_authenticated and user == post.user %}data-mark-comments-read-url="{% url 'notifications:mark_comments_read' %}"{% endif %}>
 
   <!-- 行1: タイトル（左）＋議題ドロップダウン＋ハート（右） -->
   <div class="detail__top-bar">

@@ -1474,3 +1474,49 @@ background-color: #949593;
   color: #bbb;
   text-align: center;
 }
+.mypage__top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.mypage__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #378ADD;
+  color: #378ADD;
+  background: transparent;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+
+.btn-delete {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #E24B4A;
+  color: #E24B4A;
+  background: transparent;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  background: #E6F1FB;
+}
+
+.btn-delete:hover {
+  background: #FCEBEB;
+}
+.mypage__top-row .mypage__title {
+  margin-bottom: 0;
+}

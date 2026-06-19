@@ -3,7 +3,21 @@
 {% block content %}
 
 <div class="mypage-container">
-  <h2 class="mypage__title">{{ profile_user.nickname }}さんの情報</h2>
+  <div class="mypage__top-row">
+    <h2 class="mypage__title">{{ profile_user.nickname }}さんの情報</h2>
+    {% if user == profile_user %}
+    <div class="mypage__actions">
+      <a href="{% url 'users:update' profile_user.pk %}" class="btn-edit">
+        編集する
+      </a>
+      <form action="{% url 'users:delete' profile_user.pk %}" method="post" style="display:inline">
+        {% csrf_token %}
+        <input type="submit" class="btn-delete" value="削除する">
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
   <table class="mypage__table">
     <tr>
       <th>名前</th>

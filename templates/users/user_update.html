@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="contents row">
+    <div class="container">
+      <h2>アカウント編集</h2>
+
+      {% if form.errors %}
+      <div class="error">
+        <p>入力にエラーがあります。もう一度ご確認ください。</p>
+        {{ form.non_field_errors }}
+      </div>
+      {% endif %}
+
+      <div class="field">
+        {{ form.nickname.label_tag }}
+        {{ form.nickname }}
+        {% if form.nickname.errors %}
+        <ul class="errorlist">
+          {% for error in form.nickname.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+
+      <div class="field">
+        {{ form.belonging.label_tag }}
+        {{ form.belonging }}
+        {% if form.belonging.errors %}
+        <ul class="errorlist">
+          {% for error in form.belonging.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+
+      <div class="field">
+        {{ form.role.label_tag }}
+        {{ form.role }}
+        {% if form.role.errors %}
+        <ul class="errorlist">
+          {% for error in form.role.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+
+      <div class="actions">
+        <a href="{% url 'users:mypage' request.user.pk %}" class="cancel-btn">キャンセル</a>
+        <input type="submit" class="update-btn" value="保存する">
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock content %}

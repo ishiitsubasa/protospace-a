@@ -16,6 +16,21 @@ from comments.forms import CommentForm
 from comments.models import Comment
 from discussions.models import Topic
 from users.models import CustomUser
+from django.utils import timezone
+from notifications.models import Notification  # ← パスはプロジェクトに合わせて調整
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    # ログイン中ユーザーの、この投稿に関連する未読通知を既読にする ← 追加
+    if request.user.is_authenticated:
+        Notification.objects.filter(
+            user=request.user,
+            comment__post=post,   # Notificationがcomment経由でpostに紐づいている構造に合わせた
+            read_at__isnull=True,
+        ).update(read_at=timezone.now())
+
+    return render(request, 'posts/post_detail.html', {'post': post})
 
 BELONGING_LABELS = dict(CustomUser.Belonging_CHOICES)
 
