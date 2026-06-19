@@ -1,7 +1,7 @@
 {% load static %}
 <div class="card-grid">
   {% for post in posts %}
-  <div class="card">
+  <div class="card" onclick="window.location='{% url 'Posts:detail' post.pk %}'" style="cursor:pointer">
     {% if post.image %}
     <img class="card__thumbnail" src="{{ post.image.url }}">
     {% else %}

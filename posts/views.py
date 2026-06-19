@@ -1,22 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
-from django.urls import reverse_lazy
-from .models import Post, Like, SympathyVote, PainScore
-from django.db import models
-from django.db.models import Count, Q
-from django.utils import timezone
-from datetime import timedelta
 from django.views.generic.edit import FormMixin
-from comments.forms import CommentForm
-from comments.models import Comment
-from .forms import PostForm
+from django.urls import reverse_lazy
+from django.db import models
+from django.db.models import Count, Q, Avg
+from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from posts.forms import PostForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
-from discussions.models import Topic
+from datetime import timedelta
+from .models import Post, Like, SympathyVote, PainScore
+from .forms import PostForm
+from comments.forms import CommentForm
 from comments.models import Comment
+from discussions.models import Topic
+from users.models import CustomUser
+
+BELONGING_LABELS = dict(CustomUser.Belonging_CHOICES)
 
 class IndexView(ListView):
   model = Post
@@ -203,7 +204,11 @@ def _sympathy_summary(post):
         d = v['department'] or '未設定'
         dept_raw.setdefault(d, {'yes': 0, 'maybe': 0, 'no': 0})
         dept_raw[d][v['vote_type']] += 1
-    dept_breakdown = {d: v for d, v in dept_raw.items() if sum(v.values()) >= 3}
+    dept_breakdown = {}
+    for d, v in dept_raw.items():
+        if sum(v.values()) >= 3:
+            label = BELONGING_LABELS.get(d, d)
+            dept_breakdown[label] = v
     return {'total': total, 'yes': yes, 'maybe': maybe, 'no': no, 'dept_breakdown': dept_breakdown}
 
 
@@ -224,7 +229,8 @@ def _pain_summary(post):
     dept_breakdown = {}
     for d, sc_list in dept_raw.items():
         if len(sc_list) >= 3:
-            dept_breakdown[d] = round(sum(sc_list) / len(sc_list), 1)
+            label = BELONGING_LABELS.get(d, d)
+            dept_breakdown[label] = round(sum(sc_list) / len(sc_list), 1)
     return {'total': total, 'avg': avg, 'high_rate': high_rate, 'dept_breakdown': dept_breakdown}
 
 
