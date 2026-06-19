@@ -1326,3 +1326,25 @@ footer p {
   font-size: 13px;
   color: #555;
 }
+
+
+/* ===== Comment 2カラムレイアウト ===== */
+.comment-container {
+  max-width: 860px;  /* 横並びなので少し広げる */
+}
+
+.comment-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.comment-layout .comments {
+  flex: 1;          /* 左カラム: 伸縮 */
+  margin-top: 0;
+}
+
+.comment-form {
+  width: 280px;     /* 右カラム: 固定幅 */
+  flex-shrink: 0;
+}

@@ -16,7 +16,41 @@
     <a href="{% url 'discussions:create' post.id %}" class="update-btn">+ 議題を新規作成する</a>
   </div>
 
-  {% include 'posts/detail.html' %}
+  <div class="detail-container">
+
+  <!-- 行1: タイトル（左）＋ハート（右） -->
+  <div class="detail__top-bar">
+    <div>
+      <h2 class="detail__title">{{ post.name }}</h2>
+      <p class="detail__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></p>
+    </div>
+
+  </div>
+
+  {% if user == post.user %}
+  <div class="detail__actions">
+    <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
+    <form action="{% url 'Posts:delete' post.id %}" method="post" style="display:inline">
+      {% csrf_token %}
+      <input type="submit" class="delete-btn" value="削除する">
+    </form>
+  </div>
+  {% endif %}
+
+  <!-- 行2: 画像（左）＋テキスト・投票UI（右） -->
+  <div class="detail__media-row">
+    {% if post.image %}
+    <img class="detail__image" src="{{ post.image.url }}" alt="{{ post.name }}">
+    {% endif %}
+    <div class="detail__body">
+      <h3>解決したい課題</h3>
+      <p>{{ post.catchphrase }}</p>
+      <h3>コンセプト</h3>
+      <p>{{ post.concept }}</p>
+    </div>
+  </div>
+
+
   {% include 'comments/_comment.html' %}
 
 </div>
