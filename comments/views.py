@@ -8,7 +8,6 @@ from posts.models import Post
 from discussions.models import Topic
 from notifications.models import Notification
 
-
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
@@ -19,14 +18,12 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         form.instance.post = post
 
-        # topic_pkがURLにある場合はtopicをセット
         topic_pk = self.kwargs.get('topic_pk')
         if topic_pk:
             topic = get_object_or_404(Topic, pk=topic_pk)
             form.instance.topic = topic
 
         response = super().form_valid(form)
-
         if post.user != self.request.user:
             Notification.objects.get_or_create(
                 comment=self.object,
