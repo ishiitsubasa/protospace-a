@@ -2,45 +2,90 @@
 {% load static %}
 {% block content %}
 
-<a href="{% url 'discussions:create' post.id %}" class="update-btn">+ 議題を新規作成する</a>
-<a href="{% url 'Posts:detail' post.id %}" class="update-btn">詳細ページに戻る</a>
+<div class="disc-page">
 
+  <!-- 左カラム -->
+  <div class="disc-page__left">
+    <a href="{% url 'Posts:detail' post.id %}" class="disc-back-btn">← 詳細ページに戻る</a>
 
-  <div class="detail-container">
-  <!-- 行1: タイトル（左）＋ハート（右） -->
-  <div class="detail__top-bar">
-    <div>
-      <h2 class="detail__title">{{ post.name }}</h2>
-      <p class="detail__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></p>
+    <div class="disc-topic-row">
+      <p class="disc-current-topic">{{ topic_obj.title }}</p>
+      <div class="topic-dropdown" data-post-id="{{ post.pk }}" data-current-topic-id="{{ topic_obj.pk }}" data-create-url="{% url 'discussions:create' post.pk %}">
+        <button class="topic-dropdown__btn">議題一覧<span class="topic-dropdown__arrow"> </span></button>
+        <div class="topic-dropdown__panel" style="display:none">
+          <div class="topic-dropdown__header">
+            <span>議題一覧</span>
+            <button class="topic-dropdown__create topic-dropdown__create-btn">＋ 作成する</button>
+          </div>
+          <div class="topic-dropdown__list"></div>
+          <div class="topic-dropdown__form" style="display:none">
+            <input class="topic-dropdown__form-input" type="text" placeholder="議題名を入力...">
+            <div class="topic-dropdown__form-actions">
+              <button class="topic-dropdown__form-cancel">キャンセル</button>
+              <button class="topic-dropdown__form-submit">作成する</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disc-post-card">
+      {% if post.image %}
+      <img class="disc-post-card__image" src="{{ post.image.url }}" alt="{{ post.name }}">
+      {% endif %}
+      <p class="disc-post-card__post-name">{{ post.name }}</p>
+      <p class="disc-post-card__label">解決したい課題</p>
+      <p class="disc-post-card__body">{{ post.catchphrase }}</p>
+      <div class="disc-post-card__concept-row">
+        <div>
+          <p class="disc-post-card__label">コンセプト</p>
+          <p class="disc-post-card__body">{{ post.concept }}</p>
+        </div>
+        {% if user.is_authenticated and user != post.user %}
+        <button class="like-btn {% if user_liked %}liked{% endif %}"
+                data-post-id="{{ post.pk }}"
+                data-url="{% url 'Posts:like' post.pk %}">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ like_count }}</span>
+        </button>
+        {% else %}
+        <div class="like-display">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ like_count }}</span>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 
-  {% if user == post.user %}
-  <div class="detail__actions">
-    <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
-    <form action="{% url 'Posts:delete' post.id %}" method="post" style="display:inline">
-      {% csrf_token %}
-      <input type="submit" class="delete-btn" value="削除する">
-    </form>
-  </div>
-  {% endif %}
+  <!-- 右カラム -->
+  <div class="disc-page__right">
 
-  <!-- 行2: 画像（左）＋テキスト・投票UI（右） -->
-  <div class="detail__media-row">
-    {% if post.image %}
-    <img class="detail__image" src="{{ post.image.url }}" alt="{{ post.name }}">
-    {% endif %}
-    <div class="detail__body">
-      <h3>解決したい課題</h3>
-      <p>{{ post.catchphrase }}</p>
-      <h3>コンセプト</h3>
-      <p>{{ post.concept }}</p>
+    <div class="disc-comment-list">
+      {% for comment in comments %}
+      <div class="disc-comment {% if comment.user == user %}disc-comment--mine{% endif %}">
+        {% if comment.user != user %}
+        <p class="disc-comment__name">{{ comment.user.nickname }}</p>
+        {% endif %}
+        <div class="disc-comment__bubble">{{ comment.text }}</div>
+      </div>
+      {% empty %}
+      <p class="disc-comment__empty">まだコメントがありません</p>
+      {% endfor %}
     </div>
+
+    <div class="disc-comment-form">
+      <form method="post" action="{% url 'comments:create_for_topic' pk=post.id topic_pk=topic_obj.pk %}">
+        {% csrf_token %}
+        <div class="disc-comment-form__inner">
+          <textarea class="disc-comment-form__input" name="text" placeholder="コメントを入力..." rows="1" required></textarea>
+          <button class="disc-comment-form__submit" type="submit">送信</button>
+        </div>
+      </form>
+    </div>
+
   </div>
-
-
-  {% include 'comments/_comment.html' %}
-
 </div>
 
+{% block extra_js %}<script src="{% static 'js/topic.js' %}"></script>{% endblock %}
 {% endblock %}
