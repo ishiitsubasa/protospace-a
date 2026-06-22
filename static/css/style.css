@@ -1772,10 +1772,10 @@ background-color: #949593;
 }
 
 .btn-edit {
-  padding: 7px 16px;
-  border-radius: 8px;
-  border: 1.5px solid #378ADD;
-  color: #378ADD;
+  padding: 6px 16px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  color: #555;
   background: transparent;
   font-size: 13px;
   cursor: pointer;
@@ -1786,21 +1786,19 @@ background-color: #949593;
 }
 
 .btn-delete {
-  padding: 7px 16px;
-  border-radius: 8px;
-  border: 1.5px solid #E24B4A;
-  color: #E24B4A;
+  padding: 6px 16px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  color: #555;
   background: transparent;
   font-size: 13px;
   cursor: pointer;
 }
 
-.btn-edit:hover {
-  background: #E6F1FB;
-}
-
+.btn-edit:hover,
 .btn-delete:hover {
-  background: #FCEBEB;
+  border-color: #57C3E9;
+  color: #57C3E9;
 }
 .mypage__top-row .mypage__title {
   margin-bottom: 0;
