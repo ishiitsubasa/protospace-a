@@ -29,9 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
             list.innerHTML = '<p class="topic-dropdown__empty">まだ議題がありません。</p>';
             return;
           }
+          const currentId = dropdown.dataset.currentTopicId ? parseInt(dropdown.dataset.currentTopicId) : null;
           list.innerHTML = data.topics
             .map(function (t) {
-              return '<div class="topic-dropdown__item">' + t.title + '</div>';
+              const isCurrent = currentId && t.id === currentId;
+              return '<a href="/discussions/' + t.id + '/" class="topic-dropdown__item' + (isCurrent ? ' topic-dropdown__item--current' : '') + '">' + t.title + '</a>';
             })
             .join('');
         })

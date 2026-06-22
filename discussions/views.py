@@ -40,10 +40,16 @@ class DiscussionDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['topic_obj'] = self.object        # Topic
-        ctx['post'] = self.object.post          # Post（include先が使う）
+        ctx['topic_obj'] = self.object
+        post = self.object.post
+        ctx['post'] = post
         ctx['comments'] = Comment.objects.filter(topic=self.object)
         ctx['form'] = CommentForm()
+        ctx['like_count'] = post.likes.count()
+        user = self.request.user
+        ctx['user_liked'] = (
+            user.is_authenticated and post.likes.filter(pk=user.pk).exists()
+        )
         return ctx
      
      
