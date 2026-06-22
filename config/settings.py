@@ -32,7 +32,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['protospace-a-h0ea.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['protospace-a-ba5z.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
