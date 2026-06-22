@@ -8,7 +8,7 @@ class Topic(models.Model):
         ordering = ['-created_at']
 
     post       = models.ForeignKey('posts.Post', on_delete=models.CASCADE, related_name='topics')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='created_by_id')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title      = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
