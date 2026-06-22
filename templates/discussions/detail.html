@@ -17,9 +17,9 @@
     {# 右: 投稿フォーム #}
     <div class="comment-form">
       {% if user.is_authenticated %}
-      {% if discussions %}
-      <form method="post" action="{% url 'comments:create_for_topic' pk=post.id topic_pk=discussions.pk %}">
-      {% else %}
+      
+      
+      
       <form method="post" action="{% url 'comments:create' pk=post.id %}">
       {% endif %}
         {% csrf_token %}
