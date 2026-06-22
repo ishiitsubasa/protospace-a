@@ -10,18 +10,6 @@
       <h2 class="detail__title">{{ post.name }}</h2>
       <p class="detail__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></p>
     </div>
-
-    <!-- 中央: 編集・削除ボタン -->
-    <div style="display: flex; align-items: center; gap: 10px;">
-      {% if user == post.user %}
-      <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
-      <form action="{% url 'Posts:delete' post.id %}" method="post" style="display:inline">
-        {% csrf_token %}
-        <input type="submit" class="delete-btn" value="削除する">
-      </form>
-      {% endif %}
-    </div>
-
     <div style="display: flex; align-items: center; gap: 16px;">
 
       <!-- 議題ドロップダウン -->
@@ -36,6 +24,8 @@
             <a href="{% url 'discussions:create' post.pk %}" class="topic-dropdown__create">＋ 作成する</a>
           </div>
           <a href="{%url 'discussions:detail' post.pk%}" class="topic-dropdown__list" id="topic-list-{{ post.pk }}"></a>
+            <p class="topic-dropdown__loading">読み込み中...</p>
+          
         </div>
       </div>
 
@@ -59,54 +49,63 @@
     </div>
   </div>
 
-  <!-- 左右2カラム -->
-  <div class="detail__main-row">
+  {% if user == post.user %}
+  <div class="detail__actions">
+    <a href="{% url 'Posts:update' post.id %}" class="update-btn">編集する</a>
+    <form action="{% url 'Posts:delete' post.id %}" method="post" style="display:inline">
+      {% csrf_token %}
+      <input type="submit" class="delete-btn" value="削除する">
+    </form>
+  </div>
+  {% endif %}
 
-    <!-- 左カラム: 画像 + 盛り上がっている議題 -->
-    <div class="detail__left-col">
-      {% if post.image %}
-      <img class="detail__image" src="{{ post.image.url }}" alt="{{ post.name }}">
-      {% endif %}
-
-      {% if top_topics %}
-      <div class="detail__stats">
-        <h3 class="detail__stats-title">盛り上がっている議題 TOP3</h3>
-        {% for topic in top_topics %}
-        <a href="{% url 'discussions:detail' topic.pk %}" class="topic-rank-item">
-          <div style="flex:1">
-            <div style="display:flex;justify-content:space-between">
-              <span>{{ topic.title }}</span>
-              <span style="color:#57C3E9;font-weight:bold">{{ topic.comment_count }}件</span>
-            </div>
-            {% if topic.latest_comment %}
-            <p style="font-size:12px;color:#aaa;margin-top:4px">
-              {{ topic.latest_comment.user.nickname }}:
-              {{ topic.latest_comment.text|truncatechars:20 }}
-            </p>
-            {% endif %}
-          </div>
-        </a>
-        {% empty %}
-        <p style="color:#aaa;font-size:13px">まだ議題はありません。</p>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </div>
-
-    <!-- 右カラム: テキスト + 投票UI + マトリクス -->
-    <div class="detail__right-col">
-      <div class="detail__body">
-        <h3>解決したい課題</h3>
-        <p>{{ post.catchphrase }}</p>
-      </div>
+  <!-- 行2: 画像（左）＋投票UI（右） -->
+  <div class="detail__media-row">
+    {% if post.image %}
+    <img class="detail__image" src="{{ post.image.url }}" alt="{{ post.name }}">
+    {% endif %}
+    <div class="detail__vote-col">
       {% include 'posts/_pain_score.html' %}
-      <div class="detail__body">
-        <h3>コンセプト</h3>
-        <p>{{ post.concept }}</p>
-      </div>
       {% include 'posts/_sympathy_vote.html' %}
     </div>
   </div>
+
+  <!-- 行3: テキスト（画像の下） -->
+  <div class="detail__body">
+    <h3>解決したい課題</h3>
+    <p>{{ post.catchphrase }}</p>
+    <h3>コンセプト</h3>
+    <p>{{ post.concept }}</p>
+  </div>
+
+
+  <!-- マトリクス（投稿者・管理職のみ） -->
   {% include 'posts/_matrix.html' %}
+  <!-- 盛り上がっている議題 TOP3 -->
+{% if top_topics %}
+<div class="detail__stats">
+  <h3 class="detail__stats-title">盛り上がっている議題 TOP3</h3>
+  {% for topic in top_topics %}
+  <a href="{% url 'discussions:detail' topic.pk %}" class="topic-rank-item">
+    <div style="flex:1">
+      <div style="display:flex;justify-content:space-between">
+        <span>{{ topic.title }}</span>
+        <span style="color:#57C3E9;font-weight:bold">{{ topic.comment_count }}件</span>
+      </div>
+      {% if topic.latest_comment %}
+      <p style="font-size:12px;color:#aaa;margin-top:4px">
+        {{ topic.latest_comment.user.nickname }}:
+        {{ topic.latest_comment.text|truncatechars:20 }}
+      </p>
+      {% endif %}
+    </div>
+  </a>
+  {% empty %}
+  <p style="color:#aaa;font-size:13px">まだ議題はありません。</p>
+  {% endfor %}
+</div>
+{% endif %}
+
+
 </div>
 {% endblock %}
