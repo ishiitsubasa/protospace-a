@@ -1,60 +1,76 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
-from django.urls import reverse_lazy
-from .models import Post, Like, SympathyVote, PainScore
-from django.db import models
-from django.db.models import Count, Q
-from django.utils import timezone
-from datetime import timedelta
 from django.views.generic.edit import FormMixin
-from comments.forms import CommentForm
-from comments.models import Comment
-from .forms import PostForm
+from django.urls import reverse_lazy
+from django.db import models
+from django.db.models import Count, Q, Avg
+from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+from datetime import timedelta
+from .models import Post, Like, SympathyVote, PainScore
+from .forms import PostForm
+from comments.forms import CommentForm
+from comments.models import Comment
 from discussions.models import Topic
+from users.models import CustomUser
+from django.utils import timezone
+from notifications.models import Notification  # ← パスはプロジェクトに合わせて調整
 
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    # ログイン中ユーザーの、この投稿に関連する未読通知を既読にする ← 追加
+    if request.user.is_authenticated:
+        Notification.objects.filter(
+            user=request.user,
+            comment__post=post,   # Notificationがcomment経由でpostに紐づいている構造に合わせた
+            read_at__isnull=True,
+        ).update(read_at=timezone.now())
+
+    return render(request, 'posts/post_detail.html', {'post': post})
+
+BELONGING_LABELS = dict(CustomUser.Belonging_CHOICES)
 
 class IndexView(ListView):
-    model = Post
-    template_name = 'posts/index.html'
-    context_object_name = 'posts'
+  model = Post
+  template_name = 'posts/index.html'
+  context_object_name = 'posts'
 
-    def get_queryset(self):
-        sort = self.request.GET.get('sort', 'new')
-        qs = Post.objects.all()
-        if sort == 'likes':
-            qs = qs.annotate(like_count=models.Count('likes')).order_by('-like_count', '-created_at')
-        else:
-            qs = qs.order_by('-created_at')
-        return qs
+  def get_queryset(self):
+    sort = self.request.GET.get('sort', 'new')
+    qs = Post.objects.all()
+    if sort == 'likes':
+      qs = qs.annotate(like_count=models.Count('likes')).order_by('-like_count', '-created_at')
+    else:
+      qs = qs.order_by('-created_at')
+    return qs
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        sort = self.request.GET.get('sort', 'new')
-        context['current_sort'] = sort
-        if self.request.user.is_authenticated:
-            liked_ids = set(Like.objects.filter(user=self.request.user).values_list('post_id', flat=True))
-            context['liked_post_ids'] = liked_ids
-        else:
-            context['liked_post_ids'] = set()
-        if sort == 'new':
-            two_weeks_ago = timezone.now() - timedelta(weeks=2)
-            trending = (
-                Post.objects
-                .annotate(recent_likes=Count('likes', filter=Q(likes__created_at__gte=two_weeks_ago)))
-                .filter(recent_likes__gt=0)
-                .order_by('-recent_likes', '-created_at')[:3]
-            )
-            context['trending_posts'] = list(trending)
-            context['trending_ids'] = {p.pk for p in context['trending_posts']}
-        else:
-            context['trending_posts'] = []
-            context['trending_ids'] = set()
-        return context
-
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    sort = self.request.GET.get('sort', 'new')
+    context['current_sort'] = sort
+    if self.request.user.is_authenticated:
+      liked_ids = set(Like.objects.filter(user=self.request.user).values_list('post_id', flat=True))
+      context['liked_post_ids'] = liked_ids
+    else:
+      context['liked_post_ids'] = set()
+    if sort == 'new':
+      two_weeks_ago = timezone.now() - timedelta(weeks=2)
+      trending = (
+        Post.objects
+        .annotate(recent_likes=Count('likes', filter=Q(likes__created_at__gte=two_weeks_ago)))
+        .filter(recent_likes__gt=0)
+        .order_by('-recent_likes', '-created_at')[:3]
+      )
+      context['trending_posts'] = list(trending)
+      context['trending_ids'] = {p.pk for p in context['trending_posts']}
+    else:
+      context['trending_posts'] = []
+      context['trending_ids'] = set()
+    return context
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     form_class = PostForm
@@ -68,6 +84,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+
 class PostDetailView(FormMixin, DetailView):
     model = Post
     template_name = 'posts/detail.html'
@@ -75,6 +92,7 @@ class PostDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context=super().get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(post=self.object).select_related('user')
         context['form'] = self.get_form()
         context['like_count'] = self.object.likes.count()
@@ -88,18 +106,17 @@ class PostDetailView(FormMixin, DetailView):
         context['pain_summary'] = pain_summary
 
         top_topics = Topic.objects.filter(
-            post=self.object
-        ).annotate(
-            comment_count=Count('comments')
-        ).order_by('-comment_count')[:3]
+    post=self.object
+).annotate(
+    comment_count=Count('comments')
+).order_by('-comment_count')[:3]
 
         for topic in top_topics:
             topic.latest_comment = Comment.objects.filter(
-                topic=topic
-            ).order_by('-created_at').first()
+        topic=topic
+    ).order_by('-created_at').first()
 
         context['top_topics'] = top_topics
-
         if self.request.user.is_authenticated:
             sv = SympathyVote.objects.filter(post=self.object, user=self.request.user).first()
             context['user_sympathy_vote'] = sv.vote_type if sv else None
@@ -116,41 +133,45 @@ class PostDetailView(FormMixin, DetailView):
             context['matrix'] = None
         return context
 
+class  PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+  model=Post
+  success_url=reverse_lazy('Posts:index')
 
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Post
-    success_url = reverse_lazy('Posts:index')
 
-    def test_func(self):
-        post = self.get_object()
-        return post.user == self.request.user
+  def test_func(self):
+    post=self.get_object()
+
+    return post.user==self.request.user
 
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'posts/update.html'
+  model = Post
+  form_class = PostForm
+  template_name = 'posts/update.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        post = self.get_object()
-        if post.user != request.user:
-            return redirect('Posts:index')
-        return super().dispatch(request, *args, **kwargs)
+  def dispatch(self, request, *args, **kwargs):
+      post = self.get_object()
+        # 自分の投稿でなければトップへ
+      if post.user != request.user:
+          return redirect('Posts:index')
+      return super().dispatch(request, *args, **kwargs)
 
-    def form_valid(self, form):
-        post = form.save(commit=False)
-        if not self.request.FILES.get('image'):
-            post.image = self.get_object().image
-            post.save()
-        return super().form_valid(form)
+  def form_valid(self, form):
+      post = form.save(commit=False)
+        # 画像が送られていない場合、既存画像を保持
+      if not self.request.FILES.get('image'):
+          post.image = self.get_object().image
+          post.save()
+      return super().form_valid(form)
 
-    def get_success_url(self):
-        return reverse_lazy('Posts:detail', kwargs={'pk': self.object.pk})
+  def get_success_url(self):
+      # 編集成功後は詳細ページへ
+      return reverse_lazy('Posts:detail', kwargs={'pk': self.object.pk})
 
 
-MATRIX_SYMPATHY_THRESHOLD = 60
-MATRIX_PAIN_THRESHOLD = 3.5
-MATRIX_MIN_COUNT = 5
+MATRIX_SYMPATHY_THRESHOLD = 60   # 共感率（%）
+MATRIX_PAIN_THRESHOLD = 3.5      # 課題スコア平均
+MATRIX_MIN_COUNT = 5             # 両指標ともこの件数以上で表示
 
 
 def _is_manager(user):
@@ -200,7 +221,11 @@ def _sympathy_summary(post):
         d = v['department'] or '未設定'
         dept_raw.setdefault(d, {'yes': 0, 'maybe': 0, 'no': 0})
         dept_raw[d][v['vote_type']] += 1
-    dept_breakdown = {d: v for d, v in dept_raw.items() if sum(v.values()) >= 3}
+    dept_breakdown = {}
+    for d, v in dept_raw.items():
+        if sum(v.values()) >= 3:
+            label = BELONGING_LABELS.get(d, d)
+            dept_breakdown[label] = v
     return {'total': total, 'yes': yes, 'maybe': maybe, 'no': no, 'dept_breakdown': dept_breakdown}
 
 
@@ -221,7 +246,8 @@ def _pain_summary(post):
     dept_breakdown = {}
     for d, sc_list in dept_raw.items():
         if len(sc_list) >= 3:
-            dept_breakdown[d] = round(sum(sc_list) / len(sc_list), 1)
+            label = BELONGING_LABELS.get(d, d)
+            dept_breakdown[label] = round(sum(sc_list) / len(sc_list), 1)
     return {'total': total, 'avg': avg, 'high_rate': high_rate, 'dept_breakdown': dept_breakdown}
 
 
@@ -275,3 +301,4 @@ def submit_pain_score(request, pk):
         defaults={'score': score, 'department': dept}
     )
     return JsonResponse({'ok': True, 'summary': _pain_summary(post)})
+
