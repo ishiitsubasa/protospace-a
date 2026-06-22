@@ -17,9 +17,9 @@
       {% if user.is_authenticated %}
       {% if topic_obj %}
       <form method="post" action="{% url 'comments:create_for_topic' pk=post.id topic_pk=topic_obj.pk %}">
-      {% else %}
-      <form method="post" action="{% url 'comments:create' pk=post.id %}">
-      {% endif %}
+        {% else %}
+        <form method="post" action="{% url 'comments:create' pk=post.id %}">
+          {% endif %}
         {% csrf_token %}
         {{ form.text }}
         <input type="submit" value="送信する">
