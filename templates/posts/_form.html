@@ -1,18 +1,20 @@
 {% load static %}
 
 {% if form.errors %}
-  <div class="error-summary">
-    <ul>
-      {% for field in form %}
-        {% for error in field.errors %}
-          <li><strong>{{ field.label }}:</strong>{{ error }}</li>
-        {% endfor %}
-      {% endfor %}
-    </ul>
-  </div>
+<ul>
+  {% for field in form %}
+    {% for error in field.errors %}
+      <li><strong>{{ field.label }}:</strong>{{ error }}</li>
+    {% endfor %}
+  {% endfor %}
+</ul>
 {% endif %}
-{{ form.name }}
-{{ form.catchphrase }}
-{{ form.concept }}
-{{ form.image }}
+
+{% for field in form %}
+<div>
+  {{ field.label_tag }}
+  {{ field }}
+</div>
+{% endfor %}
+
 <button type="submit" class="submit-btn">保存する</button>

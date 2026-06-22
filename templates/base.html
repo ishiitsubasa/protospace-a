@@ -11,29 +11,53 @@
   <header class="header">
     <div class="header__bar row">
       <p>SHARE THE PROTOTYPE</p>
-      <h1 class="grid-6"><a href="{% url 'Posts:index' %}">PROTO SPACE</a></h1>
+      <h1 class="grid-6"><a href="{% url 'Posts:index' %}">PRO<span class="logo-accent">TO</span> SPACE</a></h1>
       {% if user.is_authenticated %}
-        <div class="user_nav grid-6">
-          <form method="POST" action="{% url 'users:logout' %}">
-            {% csrf_token %}
+        <div class="user_nav grid-6">  
+          <form method="POST" action="{% url 'users:logout' %}"> 
+            {% csrf_token %} 
             <button type="submit">ログアウト</button>
           </form>
-          <a class="post" href="{% url 'Posts:create' %}">投稿する</a>
+          <!-- buttonから aタグに変更 -->
+          <a class="notification-bell"
+            id="notification-bell"
+            href="{% url 'notifications:list' %}"
+            title="通知"
+             aria-label="通知"
+             data-unread-url="{% url 'notifications:unread_count' %}"
+             data-mark-read-url="{% url 'notifications:mark_all_read' %}">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+               stroke-width="1.5" stroke="currentColor" width="22" height="22">
+               <path stroke-linecap="round" stroke-linejoin="round"
+                 d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967
+                   8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967
+                   8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085
+                   5.455 1.31m5.714 0a24.255 24.255 0 0
+                   1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" /> </svg>
+                   <span class="notification-badge" id="notification-badge"></span>
+                  </a>
+          <a class="post" href="{% url 'Posts:create' %}">New Proto</a>
         </div>
       {% else %}
         <div class="grid-6">
-          <a class="post" href="{% url 'users:login' %}">ログイン</a>
+           <a class="post" href="{% url 'users:login' %}">ログイン</a>
           <a class="post" href="{% url 'users:sign_up' %}">新規登録</a>
+          
         </div>
       {% endif %}
     </div>
   </header>
-  {% block content %}{% endblock content %}
+  {% block subheader %}{% endblock %}
+  <main>{% block content %}{% endblock content %}</main>
 
   <footer>
     <p>
     Copyright ©️ PROTO SPACE ALL rights reserved
     </p>
   </footer>
-</body>
+  <script src="{% static 'js/like.js' %}"></script>
+  <script src="{% static 'js/vote.js' %}"></script>
+   <script src="{% static 'js/notification.js' %}"></script>
+   <script src="{% static 'js/topic.js' %}"></script>
+  </body>
 </html>

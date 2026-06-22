@@ -7,13 +7,13 @@ class PostForm(forms.ModelForm):
     fields=['name','catchphrase','concept','image']
     widgets={
       'name':forms.TextInput(attrs={'placeholder':'name'}),
-      'catchphrase':forms.Textarea(attrs={'placeholder': 'Text', 'rows': 10}),
-      'concept':forms.Textarea(attrs={'placeholder': 'Text', 'rows': 10}),
+      'catchphrase':forms.Textarea(attrs={'rows': 3}),
+      'concept':forms.Textarea(attrs={'rows': 3}),
 
     }
     labels={
       'name':'プロトタイプの名称',
-      'catchphrase':'キャッチコピー',
+      'catchphrase':'解決したい課題',
       'concept':'コンセプト',
       'image':'プロトタイプの画像',
 

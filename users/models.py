@@ -20,10 +20,23 @@ class CustomUserManager(BaseUserManager):
         return user
 
 class CustomUser(AbstractBaseUser):
+   
+    Belonging_CHOICES = [
+        ('engineering', 'エンジニアリング部'),
+        ('sales', '営業部'),
+        ('marketing', 'マーケティング部'),
+        ('hr', '人事部'),
+        ('finance', '経理部'),
+        # 必要な部署を追加
+    ]
+
     email = models.EmailField(unique=True, blank=False, null=False)
     nickname = models.CharField(max_length=10, blank=False, null=False)
-    profile = models.CharField(max_length=100, blank=False, null=False)
-    belonging = models.TextField(blank=False, null=False)
+    belonging = models.CharField(
+        max_length=100,
+        choices=Belonging_CHOICES,
+        blank=False,
+        null=False)
     role = models.CharField(max_length=15,blank=False, null=False)
 
     USERNAME_FIELD = 'email'
@@ -32,3 +45,10 @@ class CustomUser(AbstractBaseUser):
 
     class Meta:
         db_table = 'users'
+        
+    def clean(self):
+        super().clean()
+        if self.password and len(self.password) < 6:  # ← not self.passwordを削除
+            raise ValidationError({'password': 'パスワードは6文字以上で入力してください。'})
+        
+

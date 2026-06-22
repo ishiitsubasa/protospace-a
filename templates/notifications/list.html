@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-wrapper">
+  <h2>通知一覧</h2>
+
+  {% if notifications %}
+  <div class="notification-list">
+    {% for notification in notifications %}
+    <div class="notification-item {% if notification.is_read %}read{% else %}unread{% endif %}">
+      <a href="{% url 'Posts:detail' notification.comment.post.pk %}">
+        <span class="notification-dot"></span>
+        <span class="notification-body">
+          <span class="notification-sender">{{ notification.comment.user.nickname }}</span>
+          さんが「<span class="notification-post">{{  notification.comment.post.name  }}</span>」にコメントしました
+        </span>
+        <span class="notification-time">{{ notification.created_at|date:"m/d H:i" }}</span>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="notification-empty">通知はありません。</p>
+  {% endif %}
+</div>
+{% endblock %}

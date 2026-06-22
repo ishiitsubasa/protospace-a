@@ -1,16 +1,39 @@
 {% extends "base.html" %}
-{% block content %}
 {% load static %}
+{% block content %}
 
-<div class="field">
-  <p>{{ profile_user.nickname }}さんの情報</p>
-  {{ profile_user.nickname }}
-  {{ profile_user.profile }}
-  {{ profile_user.belonging }}
-  {{ profile_user.role }}
-</div>
-<div class="contents row">
-  <p>{{ profile_user.nickname }}さんのプロトタイプ</p>
+<div class="mypage-container">
+  <div class="mypage__top-row">
+    <h2 class="mypage__title">{{ profile_user.nickname }}さんの情報</h2>
+    {% if user == profile_user %}
+    <div class="mypage__actions">
+      <a href="{% url 'users:update' profile_user.pk %}" class="btn-edit">
+        編集する
+      </a>
+      <form action="{% url 'users:delete' profile_user.pk %}" method="post" style="display:inline">
+        {% csrf_token %}
+        <input type="submit" class="btn-delete" value="削除する">
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+  <table class="mypage__table">
+    <tr>
+      <th>名前</th>
+      <td>{{ profile_user.nickname }}</td>
+    </tr>
+    <tr>
+      <th>所属</th>
+      <td>{{ profile_user.get_belonging_display }}</td>
+    </tr>
+    <tr>
+      <th>役職</th>
+      <td>{{ profile_user.role }}</td>
+    </tr>
+  </table>
+
+  <h2 class="mypage__title">{{ profile_user.nickname }}さんのプロトタイプ</h2>
   {% include "posts/_post_list.html" %}
 </div>
 

@@ -12,20 +12,27 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+from decouple import config
+from dj_database_url import parse as dburl 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+#環境変数
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r9oece(!q#q*o)o5%!&)^m*&!g@)akh2yetica8bcti8e-$yrx'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['protospace-a-ba5z.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -40,10 +47,14 @@ INSTALLED_APPS = [
     'posts',
     'users',
     'comments',
+    'notifications',
+    'discussions',
+    
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,16 +86,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+#//本番環境//
+default_dburl = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'protospace',
-        'USER': 'postgres',
-        'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    "default": config("DATABASE_URL", default=default_dburl, cast=dburl),
 }
+
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'protospace',
+#        'USER': 'postgres',
+#        'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD'),
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+# }
 
 
 # Password validation
@@ -124,7 +141,13 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
+# //本番環境//
+STATIC_ROOT = str(BASE_DIR / "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 MEDIA_ROOT = BASE_DIR / 'media/'
 MEDIA_URL = '/media/'
 AUTH_USER_MODEL='users.CustomUser'
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/users/login/'
+

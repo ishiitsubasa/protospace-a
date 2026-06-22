@@ -1,13 +1,32 @@
 {% load static %}
-
-{% for post in posts %}
-  <div class="content_post">
-    <div class="more">
-      <span><img src="{% static 'images/arrow_top.png' %}"></span>
-      <h2><a href="{% url 'Posts:detail' post.pk %}">{{ post.name }}</a></h2>
-      <p class=catchphrase>{{ post.catchphrase }}</p>
-      <span class="user">by <a href="{% url 'users:mypage' post.user.pk %}">
-        <span>投稿者</span>{{ post.user.nickname }}</a></span>
+<div class="card-grid">
+  {% for post in posts %}
+  <div class="card" onclick="window.location='{% url 'Posts:detail' post.pk %}'" style="cursor:pointer">
+    {% if post.image %}
+    <img class="card__thumbnail" src="{{ post.image.url }}">
+    {% else %}
+    <div class="card__thumbnail"></div>
+    {% endif %}
+    <div class="card__body">
+      <h2 class="card__title"><a href="{% url 'Posts:detail' post.pk %}">{{ post.name }}</a></h2>
+      <p class="card__description">{{ post.catchphrase }}</p>
+      <div class="card__footer">
+        <span class="card__author">by <a href="{% url 'users:mypage' post.user.pk %}">{{ post.user.nickname }}</a></span>
+        {% if user.is_authenticated and user != post.user %}
+        <button class="like-btn {% if post.pk in liked_post_ids %}liked{% endif %}"
+                data-post-id="{{ post.pk }}"
+                data-url="{% url 'Posts:like' post.pk %}">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ post.likes.count }}</span>
+        </button>
+        {% else %}
+        <div class="like-display">
+          <span class="like-icon">&#9829;</span>
+          <span class="like-count">{{ post.likes.count }}</span>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
-{% endfor %}
+  {% endfor %}
+</div>
