@@ -42,7 +42,7 @@ class PainScore(models.Model):
     unique_together = ('post', 'user')
 
   post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='pain_scores')
-  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='created_by_id')
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   score = models.IntegerField()
   department = models.CharField(max_length=100, default='未設定')
   created_at = models.DateTimeField(auto_now_add=True)
