@@ -25,7 +25,7 @@ class DiscussionCreateView(LoginRequiredMixin, CreateView):
     template_name = 'discussions/create.html'
 
     def get_success_url(self):
-        return reverse_lazy('Posts:detail', kwargs={'pk': self.kwargs['post_pk']})
+        return reverse_lazy('discussions:detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
         post = get_object_or_404(Post, pk=self.kwargs['post_pk'])
