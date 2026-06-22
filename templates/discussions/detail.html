@@ -10,14 +10,21 @@
 
     <div class="disc-topic-row">
       <p class="disc-current-topic">{{ topic_obj.title }}</p>
-      <div class="topic-dropdown" data-post-id="{{ post.pk }}" data-current-topic-id="{{ topic_obj.pk }}">
+      <div class="topic-dropdown" data-post-id="{{ post.pk }}" data-current-topic-id="{{ topic_obj.pk }}" data-create-url="{% url 'discussions:create' post.pk %}">
         <button class="topic-dropdown__btn">議題一覧<span class="topic-dropdown__arrow"> </span></button>
         <div class="topic-dropdown__panel" style="display:none">
           <div class="topic-dropdown__header">
             <span>議題一覧</span>
-            <a href="{% url 'discussions:create' post.pk %}" class="topic-dropdown__create">＋ 作成する</a>
+            <button class="topic-dropdown__create topic-dropdown__create-btn">＋ 作成する</button>
           </div>
           <div class="topic-dropdown__list"></div>
+          <div class="topic-dropdown__form" style="display:none">
+            <input class="topic-dropdown__form-input" type="text" placeholder="議題名を入力...">
+            <div class="topic-dropdown__form-actions">
+              <button class="topic-dropdown__form-cancel">キャンセル</button>
+              <button class="topic-dropdown__form-submit">作成する</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
