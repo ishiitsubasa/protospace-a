@@ -116,9 +116,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') submitBtn.click();
-      if (e.key === 'Escape') closeForm();
-    });
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeForm();
+      });
   });
 });

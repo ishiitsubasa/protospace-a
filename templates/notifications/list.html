@@ -7,7 +7,7 @@
   <div class="notification-list">
     {% for notification in notifications %}
     <div class="notification-item {% if notification.is_read %}read{% else %}unread{% endif %}">
-      <a href="{% url 'Posts:detail' notification.comment.post.pk %}">
+      <a href="{% if notification.comment.topic %}{% url 'discussions:detail' notification.comment.topic.pk %}{% else %}{% url 'Posts:detail' notification.comment.post.pk %}{% endif %}">
         <span class="notification-dot"></span>
         <span class="notification-body">
           <span class="notification-sender">{{ notification.comment.user.nickname }}</span>
