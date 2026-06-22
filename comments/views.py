@@ -5,7 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Comment
 from .forms import CommentForm
 from posts.models import Post
+from discussions.models import Topic
 from notifications.models import Notification
+
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
@@ -17,19 +19,29 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         form.instance.post = post
 
-        response = super().form_valid(form)  # ここでcommentが1回だけ保存される
+        # topic_pkがURLにある場合はtopicをセット
+        topic_pk = self.kwargs.get('topic_pk')
+        if topic_pk:
+            topic = get_object_or_404(Topic, pk=topic_pk)
+            form.instance.topic = topic
 
-        # 自分の投稿へのコメントは通知しない
+        response = super().form_valid(form)
+
         if post.user != self.request.user:
             Notification.objects.get_or_create(
                 comment=self.object,
                 defaults={'user': post.user}
             )
-
         return response
 
     def form_invalid(self, form):
-        return redirect('discussions:detail', pk=self.kwargs['pk'])
+        topic_pk = self.kwargs.get('topic_pk')
+        if topic_pk:
+            return redirect('discussions:detail', pk=topic_pk)
+        return redirect('Posts:detail', pk=self.kwargs['pk'])
 
     def get_success_url(self):
-        return reverse('discussions:detail', kwargs={'pk': self.kwargs['pk']})
+        topic_pk = self.kwargs.get('topic_pk')
+        if topic_pk:
+            return reverse('discussions:detail', kwargs={'pk': topic_pk})
+        return reverse('Posts:detail', kwargs={'pk': self.kwargs['pk']})

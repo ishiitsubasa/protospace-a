@@ -17,7 +17,7 @@
     {# 右: 投稿フォーム #}
     <div class="comment-form">
       {% if user.is_authenticated %}
-      <form method="post" action="{% url 'comments:create' pk=post.id %}">
+      <form method="post" action="{% url 'comments:create_for_topic' pk=post.id topic_pk=discussions.pk %}">
         {% csrf_token %}
         {{ form.text }}
         <input type="submit" value="送信する">
