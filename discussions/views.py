@@ -40,7 +40,7 @@ class DiscussionDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['discussions'] = self.object        # Topic
+        ctx['topic_obj'] = self.object        # Topic
         ctx['post'] = self.object.post          # Post（include先が使う）
         ctx['comments'] = Comment.objects.filter(topic=self.object)
         ctx['form'] = CommentForm()

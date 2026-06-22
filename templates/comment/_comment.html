@@ -15,8 +15,8 @@
     </div>
     <div class="comment-form">
       {% if user.is_authenticated %}
-      {% if discussions %}
-      <form method="post" action="{% url 'comments:create_for_topic' pk=post.id topic_pk=discussions.pk %}">
+      {% if topic_obj %}
+      <form method="post" action="{% url 'comments:create_for_topic' pk=post.id topic_pk=topic_obj.pk %}">
       {% else %}
       <form method="post" action="{% url 'comments:create' pk=post.id %}">
       {% endif %}
