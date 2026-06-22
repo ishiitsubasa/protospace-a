@@ -59,11 +59,12 @@
   </div>
 
   <!-- 右カラム -->
-  <div class="disc-page__right">
+  <div class="disc-page__right"
+       {% if user.is_authenticated %}data-mark-comments-read-url="{% url 'notifications:mark_comments_read' %}"{% endif %}>
 
-    <div class="disc-comment-list">
+    <div class="disc-comment-list" id="disc-comment-list">
       {% for comment in comments %}
-      <div class="disc-comment {% if comment.user == user %}disc-comment--mine{% endif %}">
+      <div class="disc-comment {% if comment.user == user %}disc-comment--mine{% endif %} comment-observe" data-comment-id="{{ comment.pk }}">
         {% if comment.user != user %}
         <p class="disc-comment__name">{{ comment.user.nickname }}</p>
         {% endif %}
@@ -87,5 +88,11 @@
   </div>
 </div>
 
-{% block extra_js %}<script src="{% static 'js/topic.js' %}"></script>{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/topic.js' %}"></script>
+<script>
+  const commentList = document.getElementById('disc-comment-list');
+  if (commentList) commentList.scrollTop = commentList.scrollHeight;
+</script>
+{% endblock %}
 {% endblock %}
