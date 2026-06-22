@@ -1492,6 +1492,7 @@ background-color: #949593;
 }
 
 .topic-dropdown__item {
+  display: block;
   padding: 9px 14px;
   font-size: 13px;
   color: #333;
