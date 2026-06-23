@@ -874,11 +874,18 @@ background-color: #949593;
   background: #fff;
 }
 
+.detail__stats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
 .detail__stats-title {
   font-size: 16px;
   font-weight: bold;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   text-align: left;
 }
 
