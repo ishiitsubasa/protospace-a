@@ -24,27 +24,7 @@
 
     <div style="display: flex; align-items: center; gap: 16px;">
 
-      <!-- 議題ドロップダウン -->
-      <div class="topic-dropdown" data-post-id="{{ post.pk }}" data-create-url="{% url 'discussions:create' post.pk %}">
-        <button class="topic-dropdown__btn">
-          議題一覧
-          <span class="topic-dropdown__arrow"></span>
-        </button>
-        <div class="topic-dropdown__panel">
-          <div class="topic-dropdown__header">
-            <span>議題一覧</span>
-            <button class="topic-dropdown__create topic-dropdown__create-btn">＋ 作成する</button>
-          </div>
-          <div class="topic-dropdown__list"></div>
-          <div class="topic-dropdown__form" style="display:none">
-            <input class="topic-dropdown__form-input" type="text" placeholder="議題名を入力...">
-            <div class="topic-dropdown__form-actions">
-              <button class="topic-dropdown__form-cancel">キャンセル</button>
-              <button class="topic-dropdown__form-submit">作成する</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
       <!-- いいね -->
       <div class="like-section">
@@ -77,7 +57,27 @@
 
       {% if top_topics %}
       <div class="detail__stats">
-        <h3 class="detail__stats-title">盛り上がっている議題 TOP3</h3>
+        <div class="detail__stats-header">
+          <h3 class="detail__stats-title">盛り上がっている議題 TOP3</h3>
+          <div class="topic-dropdown" data-post-id="{{ post.pk }}" data-create-url="{% url 'discussions:create' post.pk %}">
+            <button class="topic-dropdown__btn">議題一覧<span class="topic-dropdown__arrow"></span></button>
+            <div class="topic-dropdown__panel">
+              <div class="topic-dropdown__header">
+                <span>議題一覧</span>
+                <button class="topic-dropdown__create topic-dropdown__create-btn">＋ 作成する</button>
+              </div>
+              <div class="topic-dropdown__list"></div>
+              <p class="topic-dropdown__loading">読み込み中...</p>
+              <div class="topic-dropdown__form" style="display:none">
+                <input class="topic-dropdown__form-input" type="text" placeholder="議題名を入力...">
+                <div class="topic-dropdown__form-actions">
+                  <button class="topic-dropdown__form-cancel">キャンセル</button>
+                  <button class="topic-dropdown__form-submit">作成する</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         {% for topic in top_topics %}
         <a href="{% url 'discussions:detail' topic.pk %}" class="topic-rank-item">
           <div style="flex:1">
